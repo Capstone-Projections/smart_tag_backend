@@ -1,19 +1,19 @@
 {
-  "name": "smart_tag_backend",
-  "version": "1.0.0",
-  "description": "The backend of Smart Tag",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky install"
-  },
-  "author": "Capstone Projections",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.18.2",
-    "prettier": "^2.8.8"
-  },
-  "devDependencies": {
-    "husky": "^8.0.0"
-  }
+    "name": "smart_tag_backend",
+    "version": "1.0.0",
+    "description": "The backend of Smart Tag",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "prepare": "husky install"
+    },
+    "author": "Capstone Projections",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.18.2",
+        "prettier": "^2.8.8"
+    },
+    "devDependencies": {
+        "husky": "^8.0.0"
+    }
 }
