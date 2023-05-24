@@ -16,6 +16,7 @@
     "dependencies": {
         "express": "^4.18.2",
         "husky-init": "^8.0.0",
+        "mongoose": "^7.2.0",
         "prettier": "^2.8.8"
     },
     "devDependencies": {
