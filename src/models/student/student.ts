@@ -1,10 +1,3 @@
-import {model,Schema} from "mongoose";
+import { model, Schema } from 'mongoose';
 
-const student = new Schema(
-    {
-
-    },
-    {
-        
-    }
-)
+const student = new Schema({}, {});
