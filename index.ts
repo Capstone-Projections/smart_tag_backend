@@ -1,7 +1,5 @@
 const express = require('express');
-import {Request, Response } from 'express';
-
-
+import { Request, Response } from 'express';
 
 const app = express();
 const port = 3000;
@@ -13,7 +11,7 @@ app.use(
     })
 );
 
-app.get('/', (req:Request, res:Response) => {
+app.get('/', (req: Request, res: Response) => {
     res.json({ message: 'this works' });
 });
 
