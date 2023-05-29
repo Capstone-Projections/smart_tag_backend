@@ -1,5 +1,106 @@
 datasource db {
-    provider = "mysql"
-    url      = env("DB_URL")
+  provider = "mysql"
+  url      = env("DB_URL")
 }
 
+model attendance {
+  idattendance      Int     @id @default(autoincrement())
+  status            Int?    @db.TinyInt
+  lesson_idlesson   Int
+  student_idstudent Int
+  lesson            lesson  @relation(fields: [lesson_idlesson], references: [idlesson], onDelete: NoAction, onUpdate: NoAction, map: "fk_attendance_lesson1")
+  student           student @relation(fields: [student_idstudent], references: [idstudent], onDelete: NoAction, onUpdate: NoAction, map: "fk_attendance_student1")
+
+  @@index([lesson_idlesson], map: "fk_attendance_lesson1_idx")
+  @@index([student_idstudent], map: "fk_attendance_student1_idx")
+}
+
+model course {
+  idcourse            Int                   @id @default(autoincrement())
+  courseCode          String                @unique(map: "courseCode_UNIQUE") @db.VarChar(45)
+  name                String                @unique(map: "name_UNIQUE") @db.VarChar(45)
+  course_has_lecturer course_has_lecturer[]
+  course_has_lesson   course_has_lesson[]
+  student_has_course  student_has_course[]
+}
+
+model course_has_lecturer {
+  course_idcourse     Int
+  lecturer_idlecturer Int
+  course              course   @relation(fields: [course_idcourse], references: [idcourse], onDelete: NoAction, onUpdate: NoAction, map: "fk_course_has_lecturer_course1")
+  lecturer            lecturer @relation(fields: [lecturer_idlecturer], references: [idlecturer], onDelete: NoAction, onUpdate: NoAction, map: "fk_course_has_lecturer_lecturer1")
+
+  @@id([course_idcourse, lecturer_idlecturer])
+  @@index([course_idcourse], map: "fk_course_has_lecturer_course1_idx")
+  @@index([lecturer_idlecturer], map: "fk_course_has_lecturer_lecturer1_idx")
+}
+
+model course_has_lesson {
+  course_idcourse Int
+  lesson_idlesson Int
+  course          course @relation(fields: [course_idcourse], references: [idcourse], onDelete: NoAction, onUpdate: NoAction, map: "fk_course_has_lesson_course1")
+  lesson          lesson @relation(fields: [lesson_idlesson], references: [idlesson], onDelete: NoAction, onUpdate: NoAction, map: "fk_course_has_lesson_lesson1")
+
+  @@id([course_idcourse, lesson_idlesson])
+  @@index([course_idcourse], map: "fk_course_has_lesson_course1_idx")
+  @@index([lesson_idlesson], map: "fk_course_has_lesson_lesson1_idx")
+}
+
+model lecturer {
+  idlecturer          Int                   @id @default(autoincrement())
+  email               String?               @db.VarChar(45)
+  password            String?               @db.VarChar(45)
+  firstName           String?               @db.VarChar(45)
+  middleName          String?               @db.VarChar(45)
+  lastName            String?               @db.VarChar(45)
+  title               String?               @db.VarChar(45)
+  referenceNumber     String?               @db.VarChar(45)
+  course_has_lecturer course_has_lecturer[]
+}
+
+model lectureroom {
+  idlectureRoom Int      @id @default(autoincrement())
+  name          String?  @db.VarChar(100)
+  roomLocation  String?  @db.VarChar(200)
+  uid           String?  @db.VarChar(45)
+  lesson        lesson[]
+}
+
+model lesson {
+  idlesson                  Int                 @id @default(autoincrement())
+  startTime                 DateTime?           @db.Date
+  endTime                   DateTime?           @db.Date
+  day                       String?             @db.VarChar(45)
+  lectureRoom_idlectureRoom Int
+  attendance                attendance[]
+  course_has_lesson         course_has_lesson[]
+  lectureroom               lectureroom         @relation(fields: [lectureRoom_idlectureRoom], references: [idlectureRoom], onDelete: NoAction, onUpdate: NoAction, map: "fk_lesson_lectureRoom1")
+
+  @@index([lectureRoom_idlectureRoom], map: "fk_lesson_lectureRoom1_idx")
+}
+
+model student {
+  idstudent          Int                  @id @default(autoincrement())
+  email              String               @unique(map: "email_UNIQUE") @db.VarChar(45)
+  password           String?              @db.VarChar(45)
+  firstName          String?              @db.VarChar(45)
+  middleName         String?              @db.VarChar(45)
+  lastName           String?              @db.VarChar(45)
+  referenceNumber    String?              @unique(map: "referenceNumber_UNIQUE") @db.VarChar(45)
+  indexNumber        Int?                 @unique(map: "indexNumber_UNIQUE")
+  studyProgram       String?              @db.VarChar(45)
+  doubtPoints        Float?               @db.Float
+  attendance         attendance[]
+  student_has_course student_has_course[]
+}
+
+model student_has_course {
+  student_idstudent Int
+  course_idcourse   Int
+  course            course  @relation(fields: [course_idcourse], references: [idcourse], onDelete: NoAction, onUpdate: NoAction, map: "fk_student_has_course_course1")
+  student           student @relation(fields: [student_idstudent], references: [idstudent], onDelete: NoAction, onUpdate: NoAction, map: "fk_student_has_course_student")
+
+  @@id([student_idstudent, course_idcourse])
+  @@index([course_idcourse], map: "fk_student_has_course_course1_idx")
+  @@index([student_idstudent], map: "fk_student_has_course_student_idx")
+}
