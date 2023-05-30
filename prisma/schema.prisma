@@ -3,6 +3,9 @@ datasource db {
   url      = env("DB_URL")
 }
 
+generator client {
+  provider        = "prisma-client-js"
+}
 model attendance {
   idattendance      Int     @id @default(autoincrement())
   status            Int?    @db.TinyInt
@@ -18,7 +21,7 @@ model attendance {
 model course {
   idcourse            Int                   @id @default(autoincrement())
   courseCode          String                @unique(map: "courseCode_UNIQUE") @db.VarChar(45)
-  name                String                @unique(map: "name_UNIQUE") @db.VarChar(45)
+  name                String                @unique(map: "name_UNIQUE") @db.VarChar(200)
   course_has_lecturer course_has_lecturer[]
   course_has_lesson   course_has_lesson[]
   student_has_course  student_has_course[]
@@ -48,11 +51,11 @@ model course_has_lesson {
 
 model lecturer {
   idlecturer          Int                   @id @default(autoincrement())
-  email               String?               @db.VarChar(45)
-  password            String?               @db.VarChar(45)
-  firstName           String?               @db.VarChar(45)
-  middleName          String?               @db.VarChar(45)
-  lastName            String?               @db.VarChar(45)
+  email               String?               @db.VarChar(100)
+  password            String?               @db.VarChar(100)
+  firstName           String?               @db.VarChar(100)
+  middleName          String?               @db.VarChar(100)
+  lastName            String?               @db.VarChar(100)
   title               String?               @db.VarChar(45)
   referenceNumber     String?               @db.VarChar(45)
   course_has_lecturer course_has_lecturer[]
@@ -81,14 +84,14 @@ model lesson {
 
 model student {
   idstudent          Int                  @id @default(autoincrement())
-  email              String               @unique(map: "email_UNIQUE") @db.VarChar(45)
-  password           String?              @db.VarChar(45)
-  firstName          String?              @db.VarChar(45)
-  middleName         String?              @db.VarChar(45)
-  lastName           String?              @db.VarChar(45)
+  email              String               @unique(map: "email_UNIQUE") @db.VarChar(100)
+  password           String?              @db.VarChar(100)
+  firstName          String?              @db.VarChar(100)
+  middleName         String?              @db.VarChar(100)
+  lastName           String?              @db.VarChar(100)
   referenceNumber    String?              @unique(map: "referenceNumber_UNIQUE") @db.VarChar(45)
   indexNumber        Int?                 @unique(map: "indexNumber_UNIQUE")
-  studyProgram       String?              @db.VarChar(45)
+  studyProgram       String?              @db.VarChar(100)
   doubtPoints        Float?               @db.Float
   attendance         attendance[]
   student_has_course student_has_course[]
