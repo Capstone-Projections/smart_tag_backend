@@ -9,7 +9,8 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "typescriptCheck": "tsc --noEmit",
-        "prepare": "husky install"
+        "prepare": "husky install",
+        "seed": "ts-node ./src/seed.ts"
     },
     "author": "Capstone Projections",
     "license": "ISC",
