@@ -57,7 +57,7 @@ model lecturer {
   middleName          String?               @db.VarChar(100)
   lastName            String?               @db.VarChar(100)
   title               String?               @db.VarChar(45)
-  referenceNumber     String?               @db.VarChar(45)
+  staffID     String?               @db.VarChar(45)
   course_has_lecturer course_has_lecturer[]
 }
 
