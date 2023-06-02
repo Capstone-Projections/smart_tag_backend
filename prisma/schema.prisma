@@ -8,7 +8,7 @@ generator client {
 }
 model attendance {
   idattendance      Int     @id @default(autoincrement())
-  status            Int?    @db.TinyInt
+  status            Boolean    @default(false)
   lesson_idlesson   Int
   student_idstudent Int
   lesson            lesson  @relation(fields: [lesson_idlesson], references: [idlesson], onDelete: NoAction, onUpdate: NoAction, map: "fk_attendance_lesson1")
@@ -71,8 +71,8 @@ model lectureroom {
 
 model lesson {
   idlesson                  Int                 @id @default(autoincrement())
-  startTime                 DateTime?           @db.Date
-  endTime                   DateTime?           @db.Date
+  startTime                 String?           @db.VarChar(45)
+  endTime                   String?           @db.VarChar(45)
   day                       String?             @db.VarChar(45)
   lectureRoom_idlectureRoom Int
   attendance                attendance[]
