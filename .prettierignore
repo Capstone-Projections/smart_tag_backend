@@ -1,3 +1,10 @@
 .husky 
 LICENSE
 README.md
+node_modules
+package.json
+yarn.lock
+yarn-error.log
+.gitignore
+LICENSE
+tsconfig.json
