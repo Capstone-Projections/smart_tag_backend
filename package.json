@@ -7,11 +7,11 @@
         "test": "test"
     },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
         "typescriptCheck": "tsc --noEmit",
         "prepare": "husky install",
         "seed": "ts-node ./src/configs/seed.ts",
-        "dev": "ts-node-dev --respawn ./src/index.ts"
+        "dev": "ts-node-dev --respawn ./src/index.ts",
+        "test": "jest"
     },
     "author": "Capstone Projections",
     "license": "ISC",
@@ -28,6 +28,7 @@
         "ts-node-dev": "^2.0.0"
     },
     "devDependencies": {
+        "@jest/globals": "^29.5.0",
         "@types/express": "^4.17.17",
         "@types/jest": "^29.5.2",
         "@types/node": "^20.2.3",

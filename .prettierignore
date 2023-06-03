@@ -8,3 +8,4 @@ yarn-error.log
 .gitignore
 LICENSE
 tsconfig.json
+jest.config.js
