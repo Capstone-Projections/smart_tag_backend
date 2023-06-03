@@ -7,19 +7,18 @@ const server: Hapi.Server = Hapi.server({
 });
 
 export async function createServer(): Promise<Hapi.Server> {
-    await server.register([status])
-    await server.initialize()
-    return server
+    await server.register([status]);
+    await server.initialize();
+    return server;
 }
 
 export async function startServer(server: Hapi.Server): Promise<Hapi.Server> {
-    await server.start()
-    console.log(`Server running on ${server.info.uri}`)
-    return server
+    await server.start();
+    console.log(`Server running on ${server.info.uri}`);
+    return server;
 }
 
 process.on('unhandledRejection', (err) => {
     console.log(err);
     process.exit(1);
 });
-
