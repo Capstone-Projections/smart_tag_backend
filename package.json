@@ -11,7 +11,7 @@
         "typescriptCheck": "tsc --noEmit",
         "prepare": "husky install",
         "seed": "ts-node ./src/configs/seed.ts",
-        "dev": "ts-node-dev --respawn ./src/configs/server.ts"
+        "dev": "ts-node-dev --respawn ./src/index.ts"
     },
     "author": "Capstone Projections",
     "license": "ISC",
