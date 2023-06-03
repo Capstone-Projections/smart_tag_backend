@@ -3,3 +3,4 @@
 
 npx prettier -w . 
 yarn typescriptCheck
+yarn test
