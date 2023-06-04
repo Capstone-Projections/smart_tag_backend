@@ -9,7 +9,7 @@ export const server: Hapi.Server = Hapi.server({
 });
 
 export async function createServer(): Promise<Hapi.Server> {
-    await server.register([status, prismaPlugin,studentPlugin]);
+    await server.register([status, prismaPlugin, studentPlugin]);
     await server.initialize();
     return server;
 }
