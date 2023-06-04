@@ -1,7 +1,7 @@
 import Hapi from '@hapi/hapi';
 import status from '../plugins/status';
 import prismaPlugin from '../plugins/prisma';
-import studentPlugin from '../plugins/student';
+import studentPlugin from '../plugins/user';
 
 export const server: Hapi.Server = Hapi.server({
     port: process.env.PORT || 3000,

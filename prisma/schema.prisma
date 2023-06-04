@@ -10,33 +10,23 @@ model attendance {
   idattendance      Int     @id @default(autoincrement())
   status            Boolean    @default(false)
   lesson_idlesson   Int
-  student_idstudent Int
+  user_iduser Int
   lesson            lesson  @relation(fields: [lesson_idlesson], references: [idlesson], onDelete: NoAction, onUpdate: NoAction, map: "fk_attendance_lesson1")
-  student           student @relation(fields: [student_idstudent], references: [idstudent], onDelete: NoAction, onUpdate: NoAction, map: "fk_attendance_student1")
+  user           user @relation(fields: [user_iduser ], references: [iduser ], onDelete: NoAction, onUpdate: NoAction, map: "fk_attendance_user 1")
 
   @@index([lesson_idlesson], map: "fk_attendance_lesson1_idx")
-  @@index([student_idstudent], map: "fk_attendance_student1_idx")
+  @@index([user_iduser ], map: "fk_attendance_user1_idx")
 }
 
 model course {
   idcourse            Int                   @id @default(autoincrement())
   courseCode          String                @unique(map: "courseCode_UNIQUE") @db.VarChar(45)
   name                String                @unique(map: "name_UNIQUE") @db.VarChar(200)
-  course_has_lecturer course_has_lecturer[]
   course_has_lesson   course_has_lesson[]
-  student_has_course  student_has_course[]
+  user_has_course  user_has_course[]
 }
 
-model course_has_lecturer {
-  course_idcourse     Int
-  lecturer_idlecturer Int
-  course              course   @relation(fields: [course_idcourse], references: [idcourse], onDelete: NoAction, onUpdate: NoAction, map: "fk_course_has_lecturer_course1")
-  lecturer            lecturer @relation(fields: [lecturer_idlecturer], references: [idlecturer], onDelete: NoAction, onUpdate: NoAction, map: "fk_course_has_lecturer_lecturer1")
 
-  @@id([course_idcourse, lecturer_idlecturer])
-  @@index([course_idcourse], map: "fk_course_has_lecturer_course1_idx")
-  @@index([lecturer_idlecturer], map: "fk_course_has_lecturer_lecturer1_idx")
-}
 
 model course_has_lesson {
   course_idcourse Int
@@ -47,18 +37,6 @@ model course_has_lesson {
   @@id([course_idcourse, lesson_idlesson])
   @@index([course_idcourse], map: "fk_course_has_lesson_course1_idx")
   @@index([lesson_idlesson], map: "fk_course_has_lesson_lesson1_idx")
-}
-
-model lecturer {
-  idlecturer          Int                   @id @default(autoincrement())
-  email               String?               @db.VarChar(100)
-  password            String?               @db.VarChar(100)
-  firstName           String?               @db.VarChar(100)
-  middleName          String?               @db.VarChar(100)
-  lastName            String?               @db.VarChar(100)
-  title               String?               @db.VarChar(45)
-  staffID     String?               @db.VarChar(45)
-  course_has_lecturer course_has_lecturer[]
 }
 
 model lectureroom {
@@ -82,8 +60,8 @@ model lesson {
   @@index([lectureRoom_idlectureRoom], map: "fk_lesson_lectureRoom1_idx")
 }
 
-model student {
-  idstudent          Int                  @id @default(autoincrement())
+model user {
+  iduser         Int                  @id @default(autoincrement())
   email              String               @unique(map: "email_UNIQUE") @db.VarChar(100)
   password           String?              @db.VarChar(100)
   firstName          String?              @db.VarChar(100)
@@ -93,17 +71,24 @@ model student {
   indexNumber        Int?                 @unique(map: "indexNumber_UNIQUE")
   studyProgram       String?              @db.VarChar(100)
   doubtPoints        Float?               @db.Float
+  role               UserRole
   attendance         attendance[]
-  student_has_course student_has_course[]
+  user_has_course user_has_course[]
 }
 
-model student_has_course {
-  student_idstudent Int
+model user_has_course {
+  user_iduser  Int
   course_idcourse   Int
-  course            course  @relation(fields: [course_idcourse], references: [idcourse], onDelete: NoAction, onUpdate: NoAction, map: "fk_student_has_course_course1")
-  student           student @relation(fields: [student_idstudent], references: [idstudent], onDelete: NoAction, onUpdate: NoAction, map: "fk_student_has_course_student")
+  course            course  @relation(fields: [course_idcourse], references: [idcourse], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_has_course_course1")
+  user          user @relation(fields: [user_iduser], references: [iduser], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_has_course_user")
 
-  @@id([student_idstudent, course_idcourse])
-  @@index([course_idcourse], map: "fk_student_has_course_course1_idx")
-  @@index([student_idstudent], map: "fk_student_has_course_student_idx")
+  @@id([user_iduser, course_idcourse])
+  @@index([course_idcourse], map: "fk_user_has_course_course1_idx")
+  @@index([user_iduser], map: "fk_user_has_course_user_idx")
+}
+
+
+enum UserRole {
+  STUDENT
+  LECTURER
 }

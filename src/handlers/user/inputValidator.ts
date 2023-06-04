@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-export const studentInputValidator = Joi.object({
+export const userInputValidator = Joi.object({
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
     email: Joi.string().email().required(),
@@ -10,4 +10,5 @@ export const studentInputValidator = Joi.object({
     indexNumber: Joi.number().optional(),
     studyProgram: Joi.string().optional(),
     doubtPoints: Joi.number().optional(),
+    role: Joi.string().required()
 });

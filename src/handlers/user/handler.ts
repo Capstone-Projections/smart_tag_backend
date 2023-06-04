@@ -1,26 +1,27 @@
 import Hapi from '@hapi/hapi';
 import { server } from '../../configs/server';
-import { StudentInput } from './props';
+import { UserInput } from './props';
 
-export async function createStudentHandler(
+export async function createUserHandler(
     request: Hapi.Request,
     h: Hapi.ResponseToolkit
 ) {
     const { prisma } = request.server.app;
-    const payload = request.payload as StudentInput;
+    const payload = request.payload as UserInput;
 
     try {
-        const createdStudent = await prisma.student.create({
+        const createdUser = await prisma.user.create({
             data: {
                 firstName: payload.firstName,
                 lastName: payload.lastName,
                 email: payload.email,
+                role: payload.role
             },
             select: {
-                idstudent: true,
+                iduser: true,
             },
         });
-        return h.response(createdStudent).code(201);
+        return h.response(createdUser).code(201);
     } catch (err) {
         console.log(err);
     }

@@ -4,25 +4,6 @@ const prisma = new PrismaClient();
 
 // A `main` function so that we can use async/await
 async function main() {
-    const akowuah = await prisma.lecturer.create({
-        data: {
-            email: 'darkwak@live.com',
-            firstName: 'Kwabena',
-            lastName: 'Darkwa',
-            password: 'Agent99.99',
-            title: 'Mr',
-            staffID: 'STF/0001',
-            course_has_lecturer: {
-                create: {
-                    course: {
-                        connect: {
-                            idcourse: 1,
-                        },
-                    },
-                },
-            },
-        },
-    });
 
     const lectureRoom = await prisma.lectureroom.createMany({
         data: [
@@ -44,92 +25,74 @@ async function main() {
         ],
     });
 
-    const lesson = await prisma.lesson.create({
-        data: {
-            course_has_lesson: {
-                create: {
-                    course: {
-                        connect: {
-                            idcourse: 1,
-                        },
-                    },
-                },
-            },
-            lectureroom: {
-                connect: {
-                    idlectureRoom: 1,
-                },
-            },
-            day: 'Tuesday',
-            startTime: '10:30',
-            endTime: '12:30',
-        },
+    const student = await prisma.user.create({
+        data:{
+            firstName: "Kwabena",
+            lastName: "Darkwa",
+            email: "darkwak@live.com",
+            role: "STUDENT"
+        }
     });
 
-    const attendance = await prisma.attendance.create({
-        data: {
-            status: true,
-            student: {
-                connect: {
-                    idstudent: 1,
-                },
-            },
-            lesson: {
-                connect: {
-                    idlesson: 2,
-                },
-            },
-        },
-    });
-
-    const moses = await prisma.student.create({
-        data: {
-            email: 'baffourma@st.knust.edu.gh',
-            password: 'Agent99.99',
-            firstName: 'Moses',
-            middleName: 'Awuah',
-            lastName: 'Baffour',
-            referenceNumber: '20575730',
-            indexNumber: 8263719,
-            studyProgram: 'Computer Engineering',
-            doubtPoints: 0.0,
-            attendance: {
-                create: {
-                    status: true,
-                    lesson: {
-                        connect: {
-                            idlesson: 2,
-                        },
-                    },
-                },
-            },
-            student_has_course: {
-                create: {
-                    course: {
-                        connect: {
-                            idcourse: 1,
-                        },
-                    },
-                },
-            },
-        },
+    const lecturer = await prisma.user.create({
+        data:{
+            firstName: "Emmanuel",
+            lastName: "Akowuah",
+            email: "ekakowuah@st.knust.edu.gh",
+            role: "LECTURER"
+        }
     });
 
     const course = await prisma.course.create({
-        data: {
-            courseCode: 'COE 454',
-            name: 'Software Engineering',
-            course_has_lecturer: {
-                create: {
-                    lecturer: {
-                        connect: {
-                            idlecturer: 3,
-                        },
-                    },
-                },
+        data:{
+            courseCode: "COE 454",
+            name: "Digital Signal Processing",
+            user_has_course:{
+                create:{
+                    user:{
+                        connect:{
+                            iduser:1
+                        }
+                    }
+                }
             },
-        },
+            course_has_lesson:{
+                create:{
+                    lesson:{
+                        create:{
+                            startTime:"10:30",
+                            endTime:"11:30",
+                            day: "Monday",
+                            lectureroom:{
+                                connect:{
+                                    idlectureRoom:1
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     });
+
+    const attendance = await prisma.attendance.create({
+        data:{
+            status: true,
+            user: {
+                connect: {
+                    iduser:1
+                }
+            },
+            lesson:{
+                connect:{
+                    idlesson:1
+                }
+            }
+        }
+    })
+
+
+
 }
 
 main()

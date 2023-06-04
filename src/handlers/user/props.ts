@@ -1,4 +1,4 @@
-export interface StudentInput {
+export interface UserInput {
     firstName: string;
     lastName: string;
     email: string;
@@ -8,4 +8,7 @@ export interface StudentInput {
     indexNumber?: number;
     studyProgram?: string;
     doubtPoints?: number;
+    role: UserRole
 }
+
+type UserRole = "LECTURER"|"STUDENT"
