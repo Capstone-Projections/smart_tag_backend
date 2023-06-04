@@ -1,6 +1,7 @@
 import Hapi from '@hapi/hapi'
-import { server } from '../configs/server'
-import { createStudentHandler } from '../handlers/student/student.handler'
+import { createStudentHandler } from '../handlers/student/handler'
+import { studentInputValidator } from '../handlers/student/inputValidator'
+
 // plugin to instantiate Prisma Client
 const studentPlugin = {
   name: 'app/student',
@@ -12,6 +13,11 @@ const studentPlugin = {
         method: 'POST',
         path: '/users',
         handler: createStudentHandler,
+        options:{
+          validate:{
+            payload:studentInputValidator
+          }
+        }
       },
     ])
   },
