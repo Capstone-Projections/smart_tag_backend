@@ -1,7 +1,6 @@
-
-import { createUserHandler } from "../handlers/user/handler";
-import { userInputValidator } from "../handlers/user/inputValidator";
-import Hapi from '@hapi/hapi'
+import { createUserHandler } from '../handlers/user/handler';
+import { userInputValidator } from '../handlers/user/inputValidator';
+import Hapi from '@hapi/hapi';
 // plugin to instantiate Prisma Client
 const userPlugin = {
     name: 'app/user',

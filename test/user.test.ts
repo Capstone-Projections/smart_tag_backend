@@ -23,7 +23,7 @@ describe('POST /user - create student', () => {
                 firstName: 'test-first-name',
                 lastName: 'test-last-name',
                 email: `test-${Date.now()}@gmail.com`,
-                role: 'STUDENT'
+                role: 'STUDENT',
             },
         });
 

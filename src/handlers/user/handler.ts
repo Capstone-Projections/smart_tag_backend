@@ -15,7 +15,7 @@ export async function createUserHandler(
                 firstName: payload.firstName,
                 lastName: payload.lastName,
                 email: payload.email,
-                role: payload.role
+                role: payload.role,
             },
             select: {
                 iduser: true,

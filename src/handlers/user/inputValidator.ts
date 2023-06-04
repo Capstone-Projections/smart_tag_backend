@@ -10,5 +10,5 @@ export const userInputValidator = Joi.object({
     indexNumber: Joi.number().optional(),
     studyProgram: Joi.string().optional(),
     doubtPoints: Joi.number().optional(),
-    role: Joi.string().required()
+    role: Joi.string().required(),
 });

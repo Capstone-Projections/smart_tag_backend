@@ -8,7 +8,7 @@ export interface UserInput {
     indexNumber?: number;
     studyProgram?: string;
     doubtPoints?: number;
-    role: UserRole
+    role: UserRole;
 }
 
-type UserRole = "LECTURER"|"STUDENT"
+type UserRole = 'LECTURER' | 'STUDENT';
