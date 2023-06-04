@@ -1,8 +1,7 @@
 import Hapi from '@hapi/hapi';
 import { server } from '../../configs/server';
 import { UserInput } from './props';
-import Boom from '@hapi/boom'
-
+import Boom from '@hapi/boom';
 
 export async function createUserHandler(
     request: Hapi.Request,
@@ -29,24 +28,26 @@ export async function createUserHandler(
     }
 }
 
+export async function getUserHandler(
+    request: Hapi.Request,
+    h: Hapi.ResponseToolkit
+) {
+    const { prisma } = request.server.app;
+    const userId = parseInt(request.params.userId, 10);
 
-export async function getUserHandler(request: Hapi.Request, h: Hapi.ResponseToolkit) {
-    const { prisma } = request.server.app
-    const userId = parseInt(request.params.userId, 10)
-  
     try {
-      const user = await prisma.user.findUnique({
-        where: {
-          iduser: userId,
-        },
-      })
-      if (!user) {
-        return h.response().code(404)
-      } else {
-        return h.response(user).code(200)
-      }
+        const user = await prisma.user.findUnique({
+            where: {
+                iduser: userId,
+            },
+        });
+        if (!user) {
+            return h.response().code(404);
+        } else {
+            return h.response(user).code(200);
+        }
     } catch (err) {
-      console.log(err)
-      return Boom.badImplementation()
+        console.log(err);
+        return Boom.badImplementation();
     }
-  }
+}

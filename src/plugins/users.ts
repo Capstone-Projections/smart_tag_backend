@@ -1,4 +1,4 @@
-import { createUserHandler,getUserHandler } from '../handlers/users/handler';
+import { createUserHandler, getUserHandler } from '../handlers/users/handler';
 import { userInputValidator } from '../handlers/users/inputValidator';
 import Hapi from '@hapi/hapi';
 import Joi from 'joi';
@@ -25,13 +25,13 @@ const userPlugin = {
                 path: '/users/{userId}',
                 handler: getUserHandler,
                 options: {
-                  validate: {
-                    params: Joi.object({
-                      userId: Joi.number().integer(),
-                    }),
-                  },
+                    validate: {
+                        params: Joi.object({
+                            userId: Joi.number().integer(),
+                        }),
+                    },
                 },
-            }
+            },
         ]);
     },
 };
