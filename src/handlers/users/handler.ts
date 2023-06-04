@@ -1,6 +1,6 @@
 import Hapi from '@hapi/hapi';
 import { server } from '../../configs/server';
-import { UserInput } from './props';
+import { UpdateUserInput, UserInput } from './props';
 import Boom from '@hapi/boom';
 
 export async function createUserHandler(
@@ -49,5 +49,47 @@ export async function getUserHandler(
     } catch (err) {
         console.log(err);
         return Boom.badImplementation();
+    }
+}
+
+export async function deleteUserHandler(
+    request: Hapi.Request,
+    h: Hapi.ResponseToolkit
+) {
+    const { prisma } = request.server.app;
+    const userId = parseInt(request.params.userId, 10);
+
+    try {
+        await prisma.user.delete({
+            where: {
+                iduser: userId,
+            },
+        });
+        return h.response().code(204);
+    } catch (err) {
+        console.log(err);
+        return h.response().code(500);
+    }
+}
+
+export async function updateUserHandler(
+    request: Hapi.Request,
+    h: Hapi.ResponseToolkit
+) {
+    const { prisma } = request.server.app;
+    const userId = parseInt(request.params.userId, 10);
+    const payload = request.payload as UpdateUserInput;
+
+    try {
+        const updatedUser = await prisma.user.update({
+            where: {
+                iduser: userId,
+            },
+            data: payload,
+        });
+        return h.response(updatedUser).code(200);
+    } catch (err) {
+        console.log(err);
+        return h.response().code(500);
     }
 }

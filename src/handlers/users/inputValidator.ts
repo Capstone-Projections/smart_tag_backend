@@ -1,14 +1,31 @@
 import Joi from 'joi';
 
-export const userInputValidator = Joi.object({
-    firstName: Joi.string().required(),
-    lastName: Joi.string().required(),
-    email: Joi.string().email().required(),
+const userInputValidator = Joi.object({
+    firstName: Joi.string().alter({
+        create: (schema) => schema.required(),
+        update: (schema) => schema.optional(),
+    }),
+    lastName: Joi.string().alter({
+        create: (schema) => schema.required(),
+        update: (schema) => schema.optional(),
+    }),
+    email: Joi.string()
+        .email()
+        .alter({
+            create: (schema) => schema.required(),
+            update: (schema) => schema.optional(),
+        }),
     middleName: Joi.string().optional(),
     password: Joi.string().optional(),
     referenceNumber: Joi.string().optional(),
     indexNumber: Joi.number().optional(),
     studyProgram: Joi.string().optional(),
     doubtPoints: Joi.number().optional(),
-    role: Joi.string().required(),
+    role: Joi.string().alter({
+        create: (schema) => schema.required(),
+        update: (schema) => schema.optional(),
+    }),
 });
+
+export const createUserValidator = userInputValidator.tailor('create');
+export const updateUserValidator = userInputValidator.tailor('update');

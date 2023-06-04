@@ -65,4 +65,46 @@ describe('POST /user - create student', () => {
 
         expect(user.iduser).toBe(userId);
     });
+
+    test('update user fails with invalid userId parameter', async () => {
+        const response = await server.inject({
+            method: 'PUT',
+            url: `/users/aa22`,
+        });
+        expect(response.statusCode).toEqual(400);
+    });
+
+    test('update user', async () => {
+        const updatedFirstName = 'test-first-name-UPDATED';
+        const updatedLastName = 'test-last-name-UPDATED';
+
+        const response = await server.inject({
+            method: 'PUT',
+            url: `/users/${userId}`,
+            payload: {
+                firstName: updatedFirstName,
+                lastName: updatedLastName,
+            },
+        });
+        expect(response.statusCode).toEqual(200);
+        const user = JSON.parse(response.payload);
+        expect(user.firstName).toEqual(updatedFirstName);
+        expect(user.lastName).toEqual(updatedLastName);
+    });
+
+    test('delete user fails with invalid userId parameter', async () => {
+        const response = await server.inject({
+            method: 'DELETE',
+            url: `/users/aa22`,
+        });
+        expect(response.statusCode).toEqual(400);
+    });
+
+    test('delete user', async () => {
+        const response = await server.inject({
+            method: 'DELETE',
+            url: `/users/${userId}`,
+        });
+        expect(response.statusCode).toEqual(204);
+    });
 });
