@@ -13,12 +13,12 @@ describe('POST /user - create student', () => {
         await server.stop();
     });
 
-    let userId;
+    let userId:number;
 
     test('create student', async () => {
         const response = await server.inject({
             method: 'POST',
-            url: '/user',
+            url: '/users',
             payload: {
                 firstName: 'test-first-name',
                 lastName: 'test-last-name',
@@ -35,7 +35,7 @@ describe('POST /user - create student', () => {
     test('create student validation', async () => {
         const response = await server.inject({
             method: 'POST',
-            url: '/user',
+            url: '/users',
             payload: {
                 lastName: 'test-last-name',
                 email: `test-${Date.now()}@prisma.io`,
@@ -45,4 +45,24 @@ describe('POST /user - create student', () => {
         console.log(response.payload);
         expect(response.statusCode).toEqual(400);
     });
+
+    test('get user returns 404 for non existant user', async () => {
+        const response = await server.inject({
+          method: 'GET',
+          url: '/users/9999',
+        })
+      
+        expect(response.statusCode).toEqual(404)
+      })
+
+      test('get user returns user', async () => {
+        const response = await server.inject({
+          method: 'GET',
+          url: `/users/${userId}`,
+        })
+        expect(response.statusCode).toEqual(200)
+        const user = JSON.parse(response.payload)
+      
+        expect(user.iduser).toBe(userId)
+      })
 });

@@ -1,6 +1,8 @@
-import { createUserHandler } from '../handlers/user/handler';
-import { userInputValidator } from '../handlers/user/inputValidator';
+import { createUserHandler,getUserHandler } from '../handlers/users/handler';
+import { userInputValidator } from '../handlers/users/inputValidator';
 import Hapi from '@hapi/hapi';
+import Joi from 'joi';
+
 // plugin to instantiate Prisma Client
 const userPlugin = {
     name: 'app/user',
@@ -10,7 +12,7 @@ const userPlugin = {
         server.route([
             {
                 method: 'POST',
-                path: '/user',
+                path: '/users',
                 handler: createUserHandler,
                 options: {
                     validate: {
@@ -18,6 +20,18 @@ const userPlugin = {
                     },
                 },
             },
+            {
+                method: 'GET',
+                path: '/users/{userId}',
+                handler: getUserHandler,
+                options: {
+                  validate: {
+                    params: Joi.object({
+                      userId: Joi.number().integer(),
+                    }),
+                  },
+                },
+            }
         ]);
     },
 };
