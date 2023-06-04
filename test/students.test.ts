@@ -1,34 +1,47 @@
-import { number } from '@hapi/joi'
-import { createServer } from '../src/configs/server'
-import Hapi from '@hapi/hapi'
+import { number } from '@hapi/joi';
+import { createServer } from '../src/configs/server';
+import Hapi from '@hapi/hapi';
 
 describe('POST /students - create student', () => {
-  let server: Hapi.Server
+    let server: Hapi.Server;
 
-  beforeAll(async () => {
-    server = await createServer()
-  })
+    beforeAll(async () => {
+        server = await createServer();
+    });
 
-  afterAll(async () => {
-    await server.stop()
-  })
+    afterAll(async () => {
+        await server.stop();
+    });
 
-  let studentId
+    let studentId;
 
-  test('create student', async () => {
-    const response = await server.inject({
-      method: 'POST',
-      url: '/students',
-      payload: {
-        firstName: 'test-first-name',
-        lastName: 'test-last-name',
-        email: `test-${Date.now()}@gmail.com`,
-      }
-    })
+    test('create student', async () => {
+        const response = await server.inject({
+            method: 'POST',
+            url: '/students',
+            payload: {
+                firstName: 'test-first-name',
+                lastName: 'test-last-name',
+                email: `test-${Date.now()}@gmail.com`,
+            },
+        });
 
-    expect(response.statusCode).toEqual(201)
-    studentId = JSON.parse(response.payload)?.idstudent
-    expect(typeof studentId === 'number').toBeTruthy()
-  })
+        expect(response.statusCode).toEqual(201);
+        studentId = JSON.parse(response.payload)?.idstudent;
+        expect(typeof studentId === 'number').toBeTruthy();
+    });
 
-})
+    test('create user validation', async () => {
+        const response = await server.inject({
+          method: 'POST',
+          url: '/students',
+          payload: {
+            lastName: 'test-last-name',
+            email: `test-${Date.now()}@prisma.io`,
+          },
+        })
+      
+        console.log(response.payload)
+        expect(response.statusCode).toEqual(400)
+      })
+});
