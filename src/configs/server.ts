@@ -1,15 +1,15 @@
 import Hapi from '@hapi/hapi';
 import status from '../plugins/status';
 import prismaPlugin from '../plugins/prisma';
+import studentPlugin from '../plugins/student';
 
-
-const server: Hapi.Server = Hapi.server({
+export const server: Hapi.Server = Hapi.server({
     port: process.env.PORT || 3000,
     host: process.env.HOST || 'localhost',
 });
 
 export async function createServer(): Promise<Hapi.Server> {
-    await server.register([status,prismaPlugin]);
+    await server.register([status, prismaPlugin,studentPlugin]);
     await server.initialize();
     return server;
 }
