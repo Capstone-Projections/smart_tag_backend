@@ -1,36 +1,37 @@
 import Hapi from '@hapi/hapi';
 import Joi from 'joi';
-import {
-    createCourseHandler,
-    deleteCourseHandler,
-    getCoursesHandler,
-    updateCourseHandler,
-} from '../handlers/courses/handler';
-import {
-    createCourseValidator,
-    updateCourseValidator,
-} from '../handlers/courses/inputValidator';
 import { API_AUTH_STRATEGY } from '../handlers/authentication/handler';
 import { isAdmin } from '../handlers/authentication/auth-helpers';
+import path from 'path';
+import {
+    createLessonHandler,
+    deleteLessonsHandler,
+    getLessonsHandler,
+    updateLessonsHandler,
+} from '../handlers/lessons/handler';
+import {
+    lessonInputValidator,
+    updateLessonValidator,
+} from '../handlers/lessons/inputValidator';
 
-const coursesPlugin = {
-    name: 'app/course',
-    dependencies: ['prisma'],
+const lessonsPlugin = {
+    name: 'app/lessons',
+    depedencies: ['prisma'],
     register: async function (server: Hapi.Server) {
         server.route([
             {
                 method: 'POST',
-                path: '/courses',
-                handler: createCourseHandler,
+                path: '/lessons',
+                handler: createLessonHandler,
                 options: {
                     auth: {
                         mode: 'required',
                         strategy: API_AUTH_STRATEGY,
                     },
                     validate: {
-                        payload: createCourseValidator,
+                        payload: lessonInputValidator,
                         failAction: (request, h, err) => {
-                            // show validation errors to user https://github.com/hapijs/hapi/issues/3706
+                            // show validation errors to user
                             throw err;
                         },
                     },
@@ -38,19 +39,13 @@ const coursesPlugin = {
             },
             {
                 method: 'GET',
-                path: '/courses',
-                handler: getCoursesHandler,
-                options: {
-                    auth: {
-                        mode: 'required',
-                        strategy: API_AUTH_STRATEGY,
-                    },
-                },
+                path: '/lessons',
+                handler: getLessonsHandler,
             },
             {
                 method: 'PUT',
-                path: '/courses/{courseId}',
-                handler: updateCourseHandler,
+                path: '/lessons/{lessonId}',
+                handler: updateLessonsHandler,
                 options: {
                     pre: [isAdmin],
                     auth: {
@@ -59,16 +54,16 @@ const coursesPlugin = {
                     },
                     validate: {
                         params: Joi.object({
-                            courseId: Joi.number().integer(),
+                            lessonId: Joi.number().integer(),
                         }),
-                        payload: updateCourseValidator,
+                        payload: updateLessonValidator,
                     },
                 },
             },
             {
                 method: 'DELETE',
-                path: '/courses/{courseId}',
-                handler: deleteCourseHandler,
+                path: '/lessons/{lessonId}',
+                handler: deleteLessonsHandler,
                 options: {
                     pre: [isAdmin],
                     auth: {
@@ -77,10 +72,10 @@ const coursesPlugin = {
                     },
                     validate: {
                         params: Joi.object({
-                            courseId: Joi.number().integer(),
+                            lessonId: Joi.number().integer(),
                         }),
                         failAction: (request, h, err) => {
-                            // show validation errors to user https://github.com/hapijs/hapi/issues/3706
+                            // show validation errors to user
                             throw err;
                         },
                     },
@@ -89,4 +84,5 @@ const coursesPlugin = {
         ]);
     },
 };
-export default coursesPlugin;
+
+export default lessonsPlugin;

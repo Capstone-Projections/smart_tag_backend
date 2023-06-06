@@ -2,10 +2,7 @@ import Boom from '@hapi/boom';
 import Hapi from '@hapi/hapi';
 
 // Pre function to check if user is the teacher of a course and can modify it
-export async function isTeacherOfCourseOrAdmin(
-    request: Hapi.Request,
-    h: Hapi.ResponseToolkit
-) {
+export async function isAdmin(request: Hapi.Request, h: Hapi.ResponseToolkit) {
     const { isAdmin } = request.auth.credentials;
 
     if (isAdmin) {
