@@ -7,6 +7,7 @@ import authPlugin from '../plugins/auth';
 import hapiAuthJwt2 from 'hapi-auth-jwt2';
 import coursesPlugin from '../plugins/courses';
 import lessonsPlugin from '../plugins/lessons';
+import attedancePlugin from '../plugins/attendance';
 
 export const server: Hapi.Server = Hapi.server({
     port: process.env.PORT || 3000,
@@ -23,6 +24,7 @@ export async function createServer(): Promise<Hapi.Server> {
         authPlugin,
         coursesPlugin,
         lessonsPlugin,
+        attedancePlugin,
     ]);
     await server.initialize();
     return server;
