@@ -9,6 +9,7 @@ export interface UserInput {
     studyProgram?: string;
     doubtPoints?: number;
     role: UserRole;
+    isAdmin?: boolean;
 }
 
 export interface UpdateUserInput {
@@ -22,6 +23,7 @@ export interface UpdateUserInput {
     studyProgram?: string;
     doubtPoints?: number;
     role?: UserRole;
+    isAdmin?: boolean;
 }
 
 type UserRole = 'LECTURER' | 'STUDENT';

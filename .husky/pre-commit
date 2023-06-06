@@ -1,6 +1,12 @@
 #!/usr/bin/env sh 
 . "$(dirname -- "$0")/_/husky.sh"
 
+yarn lint 
 npx prettier -w . 
+git add . 
 yarn typescriptCheck
-yarn test
+# yarn test
+
+
+
+

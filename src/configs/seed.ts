@@ -39,6 +39,7 @@ async function main() {
             lastName: 'Akowuah',
             email: 'ekakowuah@st.knust.edu.gh',
             role: 'LECTURER',
+            isAdmin: true,
         },
     });
 

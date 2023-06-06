@@ -71,11 +71,31 @@ model user {
   indexNumber        Int?                 @unique(map: "indexNumber_UNIQUE")
   studyProgram       String?              @db.VarChar(100)
   doubtPoints        Float?               @db.Float
-  role               UserRole
+  role               UserRole?
   attendance         attendance[]
   user_has_course user_has_course[]
+  tokens             token[]
+  isAdmin   Boolean? @default(false)
 }
 
+model token {
+  idtoken        Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  type       TokenType
+  emailToken String?   @unique // Only used for short lived email tokens
+  valid      Boolean   @default(true)
+  expiration DateTime
+
+ // Relation fields
+  user        user @relation(fields: [iduser], references: [iduser])
+  iduser Int
+}
+
+enum TokenType {
+ EMAIL // used as a short-lived token sent to the user's email
+  API
+}
 model user_has_course {
   user_iduser  Int
   course_idcourse   Int

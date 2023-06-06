@@ -1,6 +1,5 @@
 import Hapi from '@hapi/hapi';
-import { server } from '../../configs/server';
-import { UpdateUserInput, UserInput } from './props';
+import { UpdateUserInput, UserInput } from './interface';
 import Boom from '@hapi/boom';
 
 export async function createUserHandler(

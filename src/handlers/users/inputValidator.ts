@@ -25,6 +25,7 @@ const userInputValidator = Joi.object({
         create: (schema) => schema.required(),
         update: (schema) => schema.optional(),
     }),
+    isAdmin: Joi.boolean().optional(),
 });
 
 export const createUserValidator = userInputValidator.tailor('create');
