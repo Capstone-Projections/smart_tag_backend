@@ -11,7 +11,7 @@ import {
     updateCourseValidator,
 } from '../handlers/courses/inputValidator';
 import { API_AUTH_STRATEGY } from '../handlers/authentication/handler';
-import { isAdmin } from '../handlers/authentication/auth-helpers';
+import { isAdmin } from '../utils/auth-helpers';
 
 const coursesPlugin = {
     name: 'app/course',
