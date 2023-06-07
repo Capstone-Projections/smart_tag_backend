@@ -9,6 +9,7 @@ import {
 import {
     createLectureroomHandler,
     deleteLectureroomHandler,
+    getIndividualLectureroomHandler,
     getLectureroomHandler,
     updateLectureroomHandler,
 } from '../handlers/lecturerooms/handler';
@@ -73,6 +74,25 @@ const lectureroomPlugin = {
                     validate: {
                         params: Joi.object({
                             lectureroomId: Joi.number().required(),
+                        }),
+                        failAction: (request, h, err) => {
+                            throw err;
+                        },
+                    },
+                },
+            },
+            {
+                method: 'GET',
+                path: '/lectureroom/{lectureroomId}',
+                handler: getIndividualLectureroomHandler,
+                options: {
+                    auth: {
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
+                    },
+                    validate: {
+                        params: Joi.object({
+                            lectureroomId: Joi.number().integer(),
                         }),
                         failAction: (request, h, err) => {
                             throw err;

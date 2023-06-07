@@ -101,3 +101,27 @@ export async function deleteAttendanceHandler(
         return Boom.badImplementation('failed to delete attendance');
     }
 }
+
+export async function getUserAttendanceHandler(
+    request: Hapi.Request,
+    h: Hapi.ResponseToolkit
+) {
+    const { prisma } = request.server.app;
+    // const userId = request.auth.credentials;
+    const userId = parseInt(request.params.userId, 10);
+
+    try {
+        const attendance = await prisma.attendance.findMany({
+            where: {
+                user_iduser: userId,
+            },
+            include: {
+                lesson: true,
+            },
+        });
+        return h.response(attendance).code(200);
+    } catch (err: any) {
+        request.log('error', err);
+        return Boom.badImplementation('failed to get attendance');
+    }
+}

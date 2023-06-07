@@ -6,6 +6,7 @@ import {
     createAttendanceHandler,
     deleteAttendanceHandler,
     getAttendanceHandler,
+    getUserAttendanceHandler,
     updateAttendanceHandler,
 } from '../handlers/attendances/handler';
 import {
@@ -75,6 +76,28 @@ const attedancePlugin = {
                     validate: {
                         params: Joi.object({
                             attendanceId: Joi.number().integer(),
+                        }),
+                        failAction: (request, h, err) => {
+                            // show validation errors to user
+                            throw err;
+                        },
+                    },
+                },
+            },
+            //get attendance data based on the user id
+            {
+                method: 'GET',
+                path: '/attendance/{userId}',
+                handler: getUserAttendanceHandler,
+                options: {
+                    pre: [isAdmin],
+                    auth: {
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
+                    },
+                    validate: {
+                        params: Joi.object({
+                            userId: Joi.number().integer(),
                         }),
                         failAction: (request, h, err) => {
                             // show validation errors to user

@@ -84,3 +84,27 @@ export async function deleteLectureroomHandler(
         return Boom.badImplementation('failed to delete lectureroom');
     }
 }
+
+export async function getIndividualLectureroomHandler(
+    request: Hapi.Request,
+    h: Hapi.ResponseToolkit
+) {
+    const { prisma } = request.server.app;
+    const lectureroomId = parseInt(request.params.lectureroomId, 10);
+
+    try {
+        const lectureroom = await prisma.lectureroom.findUnique({
+            where: {
+                idlectureRoom: lectureroomId,
+            },
+        });
+        if (!lectureroom) {
+            return h.response().code(404);
+        } else {
+            return h.response(lectureroom).code(200);
+        }
+    } catch (err: any) {
+        request.log('error', err);
+        return Boom.badImplementation('failed to get individual lectureroom');
+    }
+}

@@ -88,3 +88,38 @@ export async function deleteCourseHandler(
         return Boom.badImplementation('failed to delete course');
     }
 }
+
+export async function createCourseForUserHandler(
+    request: Hapi.Request,
+    h: Hapi.ResponseToolkit
+) {
+    const { prisma } = request.server.app;
+    const payload = request.payload as CourseInput;
+    const userId = parseInt(request.params.userId, 10);
+
+    try {
+        const createdCourse = await prisma.course.create({
+            data: {
+                name: payload.name,
+                courseCode: payload.courseCode,
+                user_has_course: {
+                    create: {
+                        user: {
+                            connect: {
+                                iduser: userId,
+                            },
+                        },
+                    },
+                },
+            },
+            select: {
+                idcourse: true,
+                user_has_course: true,
+            },
+        });
+        return h.response(createdCourse).code(201);
+    } catch (err: any) {
+        request.log('error', err);
+        return Boom.badImplementation('failed to create course');
+    }
+}

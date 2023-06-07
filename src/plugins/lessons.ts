@@ -6,6 +6,7 @@ import path from 'path';
 import {
     createLessonHandler,
     deleteLessonsHandler,
+    getIndividualLessonsHandler,
     getLessonsHandler,
     updateLessonsHandler,
 } from '../handlers/lessons/handler';
@@ -76,6 +77,25 @@ const lessonsPlugin = {
                         }),
                         failAction: (request, h, err) => {
                             // show validation errors to user
+                            throw err;
+                        },
+                    },
+                },
+            },
+            {
+                method: 'GET',
+                path: '/lessons/{lessonId}',
+                handler: getIndividualLessonsHandler,
+                options: {
+                    auth: {
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
+                    },
+                    validate: {
+                        params: Joi.object({
+                            lessonId: Joi.number().integer(),
+                        }),
+                        failAction: (request, h, err) => {
                             throw err;
                         },
                     },

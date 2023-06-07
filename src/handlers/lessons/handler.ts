@@ -98,3 +98,30 @@ export async function deleteLessonsHandler(
         return Boom.badImplementation('failed to delete lesson');
     }
 }
+
+export async function getIndividualLessonsHandler(
+    request: Hapi.Request,
+    h: Hapi.ResponseToolkit
+) {
+    const { prisma } = request.server.app;
+    const lessonId = parseInt(request.params.lessonId, 10);
+
+    try {
+        const lessons = await prisma.lesson.findUnique({
+            where: {
+                idlesson: lessonId,
+            },
+            include: {
+                lectureroom: true,
+            },
+        });
+        if (!lessons) {
+            return h.response().code(404);
+        } else {
+            return h.response(lessons).code(200);
+        }
+    } catch (err: any) {
+        request.log('error', err);
+        return Boom.badImplementation('failed to get lesson');
+    }
+}

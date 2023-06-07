@@ -1,6 +1,7 @@
 import Hapi from '@hapi/hapi';
 import Joi from 'joi';
 import {
+    createCourseForUserHandler,
     createCourseHandler,
     deleteCourseHandler,
     getCoursesHandler,
@@ -83,6 +84,23 @@ const coursesPlugin = {
                             // show validation errors to user https://github.com/hapijs/hapi/issues/3706
                             throw err;
                         },
+                    },
+                },
+            },
+            //create course for a particular userid(lecturer)
+            {
+                method: 'POST',
+                path: '/courses/{userId}',
+                handler: createCourseForUserHandler,
+                options: {
+                    auth: {
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
+                    },
+                    validate: {
+                        params: Joi.object({
+                            userId: Joi.number().integer(),
+                        }),
                     },
                 },
             },
