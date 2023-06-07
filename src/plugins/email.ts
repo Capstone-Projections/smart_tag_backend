@@ -32,11 +32,73 @@ const emailPlugin = {
 export default emailPlugin;
 
 async function sendEmailToken(email: string, token: string) {
+    const backgroundColor = '#ffecb3'; // Light shade of yellow
+
     const msg = {
         to: email,
         from: 'capstoneprojections@gmail.com',
         subject: 'Login token for Smart Tag Account',
         text: `The login token for the API is: ${token}`,
+        html: `
+            <html>
+                <head>
+                    <style>
+                        .container {
+                            background-color: ${backgroundColor};
+                            padding: 20px;
+                            border-radius: 5px;
+                            color: #333;
+                            font-family: Arial, sans-serif;
+                            max-width: 600px;
+                            margin: 0 auto;
+                        }
+
+                        h1 {
+                            font-size: 24px;
+                            margin-bottom: 20px;
+                        }
+
+                        p {
+                            font-size: 16px;
+                            margin-bottom: 10px;
+                        }
+
+                        .token {
+                            font-weight: bold;
+                            font-size: 20px;
+                        }
+
+                        .attendance-info {
+                            margin-top: 30px;
+                            border-top: 1px solid #333;
+                            padding-top: 20px;
+                        }
+
+                        .info-title {
+                            font-size: 18px;
+                            font-weight: bold;
+                            margin-bottom: 10px;
+                        }
+
+                        .info-description {
+                            font-size: 16px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <h1>Login token for Smart Tag Account</h1>
+                        <p>Your token is:</p>
+                        <p class="token">${token}</p>
+                        <div class="attendance-info">
+                            <h2 class="info-title">Smart Tag</h2>
+                            <p class="info-description">Thank you for using our attendance-taking application. With this token, you can securely access the system and manage attendance records.</p>
+                            <p class="info-description">Please keep this token confidential and do not share it with others.</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `,
     };
 
     await sendgrid.send(msg);
