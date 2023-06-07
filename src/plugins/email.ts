@@ -22,6 +22,8 @@ const emailPlugin = {
             server.app.sendEmailToken = debugSendEmailToken;
         } else {
             sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
+            // sendgrid.setApiKey("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");
+            server.log(`hey server	`);
             server.app.sendEmailToken = sendEmailToken;
         }
     },
@@ -32,8 +34,8 @@ export default emailPlugin;
 async function sendEmailToken(email: string, token: string) {
     const msg = {
         to: email,
-        from: 'EMAIL_ADDRESS_CONFIGURED_IN_SEND_GRID@email.com',
-        subject: 'Login token for the modern backend API',
+        from: 'capstoneprojections@gmail.com',
+        subject: 'Login token for Smart Tag Account',
         text: `The login token for the API is: ${token}`,
     };
 

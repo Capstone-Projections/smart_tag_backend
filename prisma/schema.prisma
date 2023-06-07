@@ -3,6 +3,15 @@ datasource db {
   url      = env("DB_URL")
 }
 
+generator dbml {
+  provider   = "prisma-dbml-generator"
+  output     = "../dbml"
+  outputName = "smart_tag.dbml"
+  projectName = "Smart Tag"
+  projectDatabaseType = "MySQL"
+  projectNote = "Test project description"
+}
+
 generator client {
   provider        = "prisma-client-js"
 }

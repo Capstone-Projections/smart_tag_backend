@@ -1,0 +1,122 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Project "Smart Tag" {
+  database_type: 'MySQL'
+  Note: 'Test project description'
+}
+
+Table attendance {
+  idattendance Int [pk, increment]
+  status Boolean [not null, default: false]
+  lesson_idlesson Int [not null]
+  user_iduser Int [not null]
+  lesson lesson [not null]
+  user user [not null]
+}
+
+Table course {
+  idcourse Int [pk, increment]
+  courseCode String [unique, not null]
+  name String [unique, not null]
+  course_has_lesson course_has_lesson [not null]
+  user_has_course user_has_course [not null]
+}
+
+Table course_has_lesson {
+  course_idcourse Int [not null]
+  lesson_idlesson Int [not null]
+  course course [not null]
+  lesson lesson [not null]
+
+  indexes {
+    (course_idcourse, lesson_idlesson) [pk]
+  }
+}
+
+Table lectureroom {
+  idlectureRoom Int [pk, increment]
+  name String
+  roomLocation String
+  uid String
+  lesson lesson [not null]
+}
+
+Table lesson {
+  idlesson Int [pk, increment]
+  startTime String
+  endTime String
+  day String
+  lectureRoom_idlectureRoom Int [not null]
+  attendance attendance [not null]
+  course_has_lesson course_has_lesson [not null]
+  lectureroom lectureroom [not null]
+}
+
+Table user {
+  iduser Int [pk, increment]
+  email String [unique, not null]
+  password String
+  firstName String
+  middleName String
+  lastName String
+  referenceNumber String [unique]
+  indexNumber Int [unique]
+  studyProgram String
+  doubtPoints Float
+  role UserRole
+  attendance attendance [not null]
+  user_has_course user_has_course [not null]
+  tokens token [not null]
+  isAdmin Boolean [default: false]
+}
+
+Table token {
+  idtoken Int [pk, increment]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  type TokenType [not null]
+  emailToken String [unique]
+  valid Boolean [not null, default: true]
+  expiration DateTime [not null]
+  user user [not null]
+  iduser Int [not null]
+}
+
+Table user_has_course {
+  user_iduser Int [not null]
+  course_idcourse Int [not null]
+  course course [not null]
+  user user [not null]
+
+  indexes {
+    (user_iduser, course_idcourse) [pk]
+  }
+}
+
+Enum TokenType {
+  EMAIL
+  API
+}
+
+Enum UserRole {
+  STUDENT
+  LECTURER
+}
+
+Ref: attendance.lesson_idlesson > lesson.idlesson [delete: No Action]
+
+Ref: attendance.user_iduser > user.iduser [delete: No Action]
+
+Ref: course_has_lesson.course_idcourse > course.idcourse [delete: No Action]
+
+Ref: course_has_lesson.lesson_idlesson > lesson.idlesson [delete: No Action]
+
+Ref: lesson.lectureRoom_idlectureRoom > lectureroom.idlectureRoom [delete: No Action]
+
+Ref: token.iduser > user.iduser
+
+Ref: user_has_course.course_idcourse > course.idcourse [delete: No Action]
+
+Ref: user_has_course.user_iduser > user.iduser [delete: No Action]

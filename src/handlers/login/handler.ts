@@ -42,6 +42,7 @@ export async function loginHandler(
         });
 
         // 👇 send the email token
+        // console.log("hey");
         await sendEmailToken(email, emailToken);
         return h.response().code(200);
     } catch (error: any) {
@@ -53,5 +54,5 @@ export async function loginHandler(
 
 // Generate a random 8 digit number as the email token
 function generateEmailToken(): string {
-    return Math.floor(10000000 + Math.random() * 90000000).toString();
+    return Math.floor(1000 + Math.random() * 9000).toString();
 }
