@@ -1,16 +1,17 @@
 datasource db {
   provider = "mysql"
   url      = env("DB_URL")
+  relationMode = "prisma"
 }
 
-generator dbml {
-  provider   = "prisma-dbml-generator"
-  output     = "../dbml"
-  outputName = "smart_tag.dbml"
-  projectName = "Smart Tag"
-  projectDatabaseType = "MySQL"
-  projectNote = "Test project description"
-}
+// generator dbml {
+//   provider   = "prisma-dbml-generator"
+//   output     = "../dbml"
+//   outputName = "smart_tag.dbml"
+//   projectName = "Smart Tag"
+//   projectDatabaseType = "MySQL"
+//   projectNote = "Test project description"
+// }
 
 generator client {
   provider        = "prisma-client-js"
@@ -99,6 +100,7 @@ model token {
  // Relation fields
   user        user @relation(fields: [iduser], references: [iduser])
   iduser Int
+  @@index([iduser],map:"fk_token_user_idx")
 }
 
 enum TokenType {
