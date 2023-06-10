@@ -14,7 +14,7 @@
         "dev:prod": "node ./src/index.js",
         "test": "jest",
         "lint": "npx prettier -w .",
-        "postinstall": "npx prisma generate && npx prisma migrate"
+        "postinstall": "npx prisma generate && npx prisma migrate status"
     },
     "author": "Capstone Projections",
     "license": "ISC",
