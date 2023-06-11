@@ -138,13 +138,6 @@ export async function getAttendanceForLessonHandler(
             where: {
                 lesson_idlesson: lessonId,
             },
-            include: {
-                user: {
-                    select: {
-                        iduser: true,
-                    },
-                },
-            },
         });
         return h.response(attendance).code(200);
     } catch (err: any) {

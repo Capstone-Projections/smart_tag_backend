@@ -125,3 +125,34 @@ export async function getIndividualLessonsHandler(
         return Boom.badImplementation('failed to get lesson');
     }
 }
+
+export async function getLessonsForCourseHandler(
+    request: Hapi.Request,
+    h: Hapi.ResponseToolkit
+) {
+    const { prisma } = request.server.app;
+    const courseId = parseInt(request.params.courseId, 10);
+
+    try {
+        const lessons = await prisma.lesson.findMany({
+            where: {
+                course_has_lesson: {
+                    some: {
+                        course_idcourse: courseId,
+                    },
+                },
+            },
+            include: {
+                lectureroom: true,
+            },
+        });
+        if (!lessons) {
+            return h.response().code(404);
+        } else {
+            return h.response(lessons).code(200);
+        }
+    } catch (err: any) {
+        request.log('error', err);
+        return Boom.badImplementation('failed to get lesson');
+    }
+}

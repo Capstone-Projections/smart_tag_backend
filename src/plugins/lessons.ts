@@ -7,6 +7,7 @@ import {
     createLessonHandler,
     deleteLessonsHandler,
     getIndividualLessonsHandler,
+    getLessonsForCourseHandler,
     getLessonsHandler,
     updateLessonsHandler,
 } from '../handlers/lessons/handler';
@@ -94,6 +95,26 @@ const lessonsPlugin = {
                     validate: {
                         params: Joi.object({
                             lessonId: Joi.number().integer(),
+                        }),
+                        failAction: (request, h, err) => {
+                            throw err;
+                        },
+                    },
+                },
+            },
+            //get lessons per course id
+            {
+                method: 'GET',
+                path: '/lessons/course/{courseId}',
+                handler: getLessonsForCourseHandler,
+                options: {
+                    auth: {
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
+                    },
+                    validate: {
+                        params: Joi.object({
+                            courseId: Joi.number().integer(),
                         }),
                         failAction: (request, h, err) => {
                             throw err;
