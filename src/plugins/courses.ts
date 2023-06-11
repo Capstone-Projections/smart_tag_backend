@@ -4,6 +4,7 @@ import {
     createCourseForUserHandler,
     createCourseHandler,
     deleteCourseHandler,
+    getCoursesForUserHandler,
     getCoursesHandler,
     updateCourseHandler,
 } from '../handlers/courses/handler';
@@ -92,6 +93,22 @@ const coursesPlugin = {
                 method: 'POST',
                 path: '/courses/{userId}',
                 handler: createCourseForUserHandler,
+                options: {
+                    auth: {
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
+                    },
+                    validate: {
+                        params: Joi.object({
+                            userId: Joi.number().integer(),
+                        }),
+                    },
+                },
+            },
+            {
+                method: 'GET',
+                path: '/courses/{userId}',
+                handler: getCoursesForUserHandler,
                 options: {
                     auth: {
                         mode: 'required',

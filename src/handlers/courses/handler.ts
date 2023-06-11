@@ -123,3 +123,29 @@ export async function createCourseForUserHandler(
         return Boom.badImplementation('failed to create course');
     }
 }
+
+export async function getCoursesForUserHandler(
+    request: Hapi.Request,
+    h: Hapi.ResponseToolkit
+) {
+    const { prisma } = request.server.app;
+    const userId = parseInt(request.params.userId, 10);
+
+    try {
+        const courses = await prisma.course.findMany({
+            where: {
+                user_has_course: {
+                    some: {
+                        user: {
+                            iduser: userId,
+                        },
+                    },
+                },
+            },
+        });
+        return h.response(courses).code(200);
+    } catch (err: any) {
+        request.log('error', err);
+        return Boom.badImplementation('failed to get courses');
+    }
+}

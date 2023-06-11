@@ -10,6 +10,7 @@ const plugin: Hapi.Plugin<undefined> = {
                 return h.response({ up: true }).code(200);
             },
             options: {
+                //has to be false for health checks to work
                 auth: false,
             },
         });
