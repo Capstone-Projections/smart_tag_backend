@@ -5,6 +5,7 @@ import { isAdmin } from '../utils/auth-helpers';
 import {
     createAttendanceHandler,
     deleteAttendanceHandler,
+    getAttendanceForLessonHandler,
     getAttendanceHandler,
     getUserAttendanceHandler,
     updateAttendanceHandler,
@@ -87,8 +88,29 @@ const attedancePlugin = {
             //get attendance data based on the user id
             {
                 method: 'GET',
-                path: '/attendance/{userId}',
+                path: '/attendance/user/{userId}',
                 handler: getUserAttendanceHandler,
+                options: {
+                    auth: {
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
+                    },
+                    validate: {
+                        params: Joi.object({
+                            userId: Joi.number().integer(),
+                        }),
+                        failAction: (request, h, err) => {
+                            // show validation errors to user
+                            throw err;
+                        },
+                    },
+                },
+            },
+            //get attendance per lesson id
+            {
+                method: 'GET',
+                path: '/attendance/lesson/{lessonId}',
+                handler: getAttendanceForLessonHandler,
                 options: {
                     pre: [isAdmin],
                     auth: {
@@ -97,7 +119,7 @@ const attedancePlugin = {
                     },
                     validate: {
                         params: Joi.object({
-                            userId: Joi.number().integer(),
+                            lessonId: Joi.number().integer(),
                         }),
                         failAction: (request, h, err) => {
                             // show validation errors to user

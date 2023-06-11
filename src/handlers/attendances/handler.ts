@@ -125,3 +125,30 @@ export async function getUserAttendanceHandler(
         return Boom.badImplementation('failed to get attendance');
     }
 }
+
+export async function getAttendanceForLessonHandler(
+    request: Hapi.Request,
+    h: Hapi.ResponseToolkit
+) {
+    const { prisma } = request.server.app;
+    const lessonId = parseInt(request.params.lessonId, 10);
+
+    try {
+        const attendance = await prisma.attendance.findMany({
+            where: {
+                lesson_idlesson: lessonId,
+            },
+            include: {
+                user: {
+                    select: {
+                        iduser: true,
+                    },
+                },
+            },
+        });
+        return h.response(attendance).code(200);
+    } catch (err: any) {
+        request.log('error', err);
+        return Boom.badImplementation('failed to get attendance');
+    }
+}
