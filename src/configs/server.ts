@@ -13,9 +13,15 @@ import lectureroomPlugin from '../plugins/lectureroom';
 export const server: Hapi.Server = Hapi.server({
     port: process.env.PORT || 3000,
     host: process.env.HOST || 'localhost',
+    routes: {
+        cors: {
+            origin: ['*'],
+        },
+    },
 });
 
 export async function createServer(): Promise<Hapi.Server> {
+    //allow for cors in this server
     await server.register([
         status,
         prismaPlugin,
