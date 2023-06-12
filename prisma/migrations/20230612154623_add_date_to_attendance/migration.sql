@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `attendance` ADD COLUMN `currentDateTime` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3);
