@@ -7,10 +7,31 @@ const plugin: Hapi.Plugin<undefined> = {
             method: 'GET',
             path: '/',
             handler: (_, h: Hapi.ResponseToolkit) => {
-                return h.response({ up: true }).code(200);
+                const html = `
+          <html>
+            <head>
+              <title>Status Page</title>
+              <style>
+                body {
+                  font-family: Arial, sans-serif;
+                  background-color: #f5f5f5;
+                  padding: 20px;
+                  text-align: center;
+                }
+                h1 {
+                  color: #333;
+                }
+              </style>
+            </head>
+            <body>
+              <h1>Server is up and running!</h1>
+            </body>
+          </html>
+        `;
+                return h.response(html).type('text/html');
             },
             options: {
-                //has to be false for health checks to work
+                // has to be false for health checks to work
                 auth: false,
             },
         });
