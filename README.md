@@ -7,15 +7,15 @@ Project Management : [Notion Page](https://www.notion.so/Teamspace-Home-fba74a5d
 
 ## Project Management:blush:
 
-We use [Notion](https://www.notion.so/Teamspace-Home-fba74a5d54be44d49325709de4ed9b68) for our project management. Search through the current sprint to find the particular feature that you can be working on. We use [GitHub](https://github.com/orgs/Capstone-Projections/projects/1/views/2) to track the specific tasks being worked on at the moment.
+We use [Notion](https://www.notion.so/Teamspace-Home-fba74a5d54be44d49325709de4ed9b68) for our project management. Search through the current sprint to find the particular feature that you can be working on.
 
 ## Contributing Code :bowtie:
 
 ### Setting up Project
 
-Inside the `root` directory, run the command,`npm install`
+Inside the `root` directory, run the command,`yarn install`
 
-#### NB: WE ARE USING `npm` AS OUR PACKAGE MANAGER
+#### NB: WE ARE USING `yarn` AS OUR PACKAGE MANAGER
 
 ### After Project Setup
 
