@@ -12,7 +12,7 @@ import lectureroomPlugin from '../plugins/lectureroom';
 
 export const server: Hapi.Server = Hapi.server({
     port: process.env.PORT || 3000,
-    host: process.env.HOST || 'localhost',
+    host: process.env.HOST,
     routes: {
         cors: {
             origin: ['http://localhost:3000', 'https://smart-tag.onrender.com'],
