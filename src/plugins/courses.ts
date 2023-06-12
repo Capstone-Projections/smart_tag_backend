@@ -6,6 +6,7 @@ import {
     deleteCourseHandler,
     getCoursesForUserHandler,
     getCoursesHandler,
+    getUsersForCourseHandler,
     updateCourseHandler,
 } from '../handlers/courses/handler';
 import {
@@ -117,6 +118,23 @@ const coursesPlugin = {
                     validate: {
                         params: Joi.object({
                             userId: Joi.number().integer(),
+                        }),
+                    },
+                },
+            },
+            {
+                method: 'GET',
+                path: '/courses/users/{courseId}',
+                handler: getUsersForCourseHandler,
+                options: {
+                    auth: {
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
+                        // mode: 'optional'
+                    },
+                    validate: {
+                        params: Joi.object({
+                            courseId: Joi.number().integer(),
                         }),
                     },
                 },

@@ -149,3 +149,30 @@ export async function getCoursesForUserHandler(
         return Boom.badImplementation('failed to get courses');
     }
 }
+
+export async function getUsersForCourseHandler(
+    request: Hapi.Request,
+    h: Hapi.ResponseToolkit
+) {
+    const { prisma } = request.server.app;
+    const courseId = parseInt(request.params.courseId, 10);
+
+    try {
+        const users = await prisma.user.findMany({
+            where: {
+                role: 'STUDENT',
+                user_has_course: {
+                    some: {
+                        course: {
+                            idcourse: courseId,
+                        },
+                    },
+                },
+            },
+        });
+        return h.response(users).code(200);
+    } catch (err: any) {
+        request.log('error', err);
+        return Boom.badImplementation('failed to get users');
+    }
+}
