@@ -11,7 +11,7 @@ import attedancePlugin from '../plugins/attendance';
 import lectureroomPlugin from '../plugins/lectureroom';
 
 export const server: Hapi.Server = Hapi.server({
-    port: process.env.PORT,
+    port: process.env.PORT || 3000,
     host: process.env.HOST,
     routes: {
         cors: {
