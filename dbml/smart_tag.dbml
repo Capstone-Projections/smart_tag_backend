@@ -10,6 +10,7 @@ Project "Smart Tag" {
 Table attendance {
   idattendance Int [pk, increment]
   status Boolean [not null, default: false]
+  currentDateTime DateTime [default: `now()`, not null]
   lesson_idlesson Int [not null]
   user_iduser Int [not null]
   lesson lesson [not null]
