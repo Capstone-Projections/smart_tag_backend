@@ -11,9 +11,10 @@
         "prepare": "husky install",
         "seed": "ts-node ./src/configs/seed.ts",
         "dev": "ts-node-dev --respawn ./src/index.ts",
-        "dev:prod": "node ./src/index.js",
+        "dev:prod": "node ./dist/index.js",
         "test": "jest",
-        "lint": "npx prettier -w ."
+        "lint": "npx prettier -w .",
+        "postinstall": "tsc"
     },
     "author": "Capstone Projections",
     "license": "ISC",
