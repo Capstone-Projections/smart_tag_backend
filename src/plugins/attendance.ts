@@ -7,6 +7,7 @@ import {
     deleteAttendanceHandler,
     getAttendanceForLessonHandler,
     getAttendanceHandler,
+    getListOfPeopleForImpersonationDetectionHandler,
     getUserAttendanceHandler,
     updateAttendanceHandler,
 } from '../handlers/attendances/handler';
@@ -115,6 +116,27 @@ const attedancePlugin = {
                 method: 'GET',
                 path: '/attendance/lesson/{lessonId}',
                 handler: getAttendanceForLessonHandler,
+                options: {
+                    pre: [isAdmin],
+                    auth: {
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
+                    },
+                    validate: {
+                        params: Joi.object({
+                            lessonId: Joi.number().integer(),
+                        }),
+                        failAction: (request, h, err) => {
+                            // show validation errors to user
+                            throw err;
+                        },
+                    },
+                },
+            },
+            {
+                method: 'GET',
+                path: '/attendance/lessons/users/{lessonId}',
+                handler: getListOfPeopleForImpersonationDetectionHandler,
                 options: {
                     pre: [isAdmin],
                     auth: {

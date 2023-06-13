@@ -16,6 +16,7 @@ export async function createAttendanceHandler(
                 status: payload.status,
                 lesson_idlesson: payload.lesson_idlesson,
                 user_iduser: payload.user_iduser,
+                currentDateTime: currentDate,
             },
             select: {
                 idattendance: true,
@@ -145,3 +146,28 @@ export async function getAttendanceForLessonHandler(
         return Boom.badImplementation('failed to get attendance');
     }
 }
+
+export async function getListOfPeopleForImpersonationDetectionHandler(
+    request: Hapi.Request,
+    h: Hapi.ResponseToolkit
+) {
+    const { prisma } = request.server.app;
+    const lessonId = parseInt(request.params.lessonId, 10);
+
+    try {
+        const attendancePeople = await prisma.user.findMany({
+            where: {
+                attendance: {
+                    // currentDateTime: currentDate,
+                },
+            },
+        });
+    } catch (err: any) {
+        request.log('error', err);
+        return Boom.badImplementation(
+            'failed to get list of people for impersonation detection'
+        );
+    }
+}
+
+const currentDate = new Date().toISOString().slice(0, 10);
