@@ -81,7 +81,7 @@ model user {
   referenceNumber    String?              @unique(map: "referenceNumber_UNIQUE") @db.VarChar(45)
   indexNumber        Int?                 @unique(map: "indexNumber_UNIQUE")
   studyProgram       String?              @db.VarChar(100)
-  doubtPoints        Float?               @db.Float
+  doubtPoints        Float?               @db.Float @default(0)
   role               UserRole?
   attendance         attendance[]
   user_has_course user_has_course[]

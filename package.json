@@ -9,7 +9,8 @@
     "scripts": {
         "typescriptCheck": "tsc --noEmit",
         "prepare": "husky install",
-        "seed": "ts-node ./src/configs/seed.ts",
+        "seed": "ts-node ./src/seed/seed.ts",
+        "seed:attendance": "ts-node ./src/seed/attendance.seed.ts",
         "dev": "ts-node-dev --respawn ./src/index.ts",
         "dev:prod": "node ./dist/index.js",
         "test": "jest",
