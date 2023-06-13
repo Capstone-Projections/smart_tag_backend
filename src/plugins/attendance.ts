@@ -25,6 +25,10 @@ const attedancePlugin = {
                 path: '/attendance',
                 handler: createAttendanceHandler,
                 options: {
+                    auth: {
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
+                    },
                     validate: {
                         payload: attendanceInputValidator,
                         failAction: (request, h, err) => {

@@ -63,10 +63,10 @@ model lesson {
   startTime                 String?           @db.VarChar(45)
   endTime                   String?           @db.VarChar(45)
   day                       String?             @db.VarChar(45)
-  lectureRoom_idlectureRoom Int
+  lectureRoom_idlectureRoom Int?
   attendance                attendance[]
   course_has_lesson         course_has_lesson[]
-  lectureroom               lectureroom         @relation(fields: [lectureRoom_idlectureRoom], references: [idlectureRoom], onDelete: NoAction, onUpdate: NoAction, map: "fk_lesson_lectureRoom1")
+  lectureroom               lectureroom?        @relation(fields: [lectureRoom_idlectureRoom], references: [idlectureRoom], onDelete: SetNull, onUpdate: SetNull, map: "fk_lesson_lectureRoom1")
 
   @@index([lectureRoom_idlectureRoom], map: "fk_lesson_lectureRoom1_idx")
 }

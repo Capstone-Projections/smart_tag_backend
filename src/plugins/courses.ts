@@ -26,6 +26,7 @@ const coursesPlugin = {
                 path: '/courses',
                 handler: createCourseHandler,
                 options: {
+                    pre: [isAdmin],
                     auth: {
                         mode: 'required',
                         strategy: API_AUTH_STRATEGY,
