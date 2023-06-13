@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
+const currentDate = new Date().toISOString().slice(0, 10);
 
 async function main() {
     const attendance = await prisma.attendance.createMany({
@@ -9,21 +10,25 @@ async function main() {
                 status: true,
                 user_iduser: 1,
                 lesson_idlesson: 1,
+                currentDateTime: currentDate,
             },
             {
                 status: true,
                 user_iduser: 3,
                 lesson_idlesson: 1,
+                currentDateTime: currentDate,
             },
             {
                 status: true,
                 user_iduser: 4,
                 lesson_idlesson: 1,
+                currentDateTime: currentDate,
             },
             {
                 status: true,
                 user_iduser: 5,
                 lesson_idlesson: 1,
+                currentDateTime: currentDate,
             },
         ],
     });

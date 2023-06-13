@@ -27,6 +27,7 @@ const attedancePlugin = {
                 handler: createAttendanceHandler,
                 options: {
                     auth: {
+                        // mode: 'optional'
                         mode: 'required',
                         strategy: API_AUTH_STRATEGY,
                     },
@@ -135,13 +136,15 @@ const attedancePlugin = {
             },
             {
                 method: 'GET',
+                // path: '/attendance/lessons/users/',
                 path: '/attendance/lessons/users/{lessonId}',
                 handler: getListOfPeopleForImpersonationDetectionHandler,
                 options: {
-                    pre: [isAdmin],
+                    // pre: [isAdmin],
                     auth: {
-                        mode: 'required',
-                        strategy: API_AUTH_STRATEGY,
+                        // mode: 'required',
+                        // strategy: API_AUTH_STRATEGY,
+                        mode: 'optional',
                     },
                     validate: {
                         params: Joi.object({

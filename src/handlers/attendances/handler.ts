@@ -158,10 +158,20 @@ export async function getListOfPeopleForImpersonationDetectionHandler(
         const attendancePeople = await prisma.user.findMany({
             where: {
                 attendance: {
-                    // currentDateTime: currentDate,
+                    some: {
+                        currentDateTime: currentDate,
+                        lesson_idlesson: lessonId,
+                    },
                 },
             },
+            select: {
+                iduser: true,
+                doubtPoints: true,
+            },
         });
+        const selectedUsers = selectUsersFromAttendance(attendancePeople);
+        return h.response(selectedUsers).code(200);
+        // return h.response(attendancePeople).code(200);
     } catch (err: any) {
         request.log('error', err);
         return Boom.badImplementation(
@@ -170,4 +180,45 @@ export async function getListOfPeopleForImpersonationDetectionHandler(
     }
 }
 
-const currentDate = new Date().toISOString().slice(0, 10);
+const currentDate: string = new Date().toISOString().slice(0, 10);
+
+function selectUsersFromAttendance(attendancePeople: any[]): any[] {
+    // Sort the attendancePeople array based on doubtPoints in descending order
+    attendancePeople.sort(
+        (a, b) => (b.doubtPoints || 0) - (a.doubtPoints || 0)
+    );
+
+    const selectedUsers: any[] = [];
+    const totalCount = attendancePeople.length;
+
+    const topCount = Math.min(Math.floor(totalCount * 0.6), 6);
+    const middleCount = Math.min(Math.floor(totalCount * 0.2), 2);
+    const bottomCount = Math.min(Math.floor(totalCount * 0.2), 2);
+
+    // Select users from the top section
+    for (let i = 0; i < topCount; i++) {
+        if (attendancePeople.length === 0) {
+            break; // Break if all users have been selected
+        }
+        selectedUsers.push(attendancePeople.shift());
+    }
+
+    // Select users from the middle section
+    for (let i = 0; i < middleCount; i++) {
+        if (attendancePeople.length === 0) {
+            break; // Break if all users have been selected
+        }
+        const middleIndex = Math.floor(attendancePeople.length / 2);
+        selectedUsers.push(attendancePeople.splice(middleIndex, 1)[0]);
+    }
+
+    // Select users from the bottom section
+    for (let i = 0; i < bottomCount; i++) {
+        if (attendancePeople.length === 0) {
+            break; // Break if all users have been selected
+        }
+        selectedUsers.push(attendancePeople.pop());
+    }
+
+    return selectedUsers;
+}
