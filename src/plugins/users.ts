@@ -3,6 +3,7 @@ import {
     getUserHandler,
     deleteUserHandler,
     updateUserHandler,
+    updateUserdoubtPointsHandler,
 } from '../handlers/users/handler';
 import {
     createUserValidator,
@@ -10,6 +11,8 @@ import {
 } from '../handlers/users/inputValidator';
 import Hapi from '@hapi/hapi';
 import Joi from 'joi';
+import { isAdmin } from '../utils/auth-helpers';
+import { API_AUTH_STRATEGY } from '../handlers/authentication/handler';
 
 // plugin to instantiate Prisma Client
 const userPlugin = {
@@ -60,6 +63,26 @@ const userPlugin = {
                     validate: {
                         params: Joi.object({
                             userId: Joi.number().integer(),
+                        }),
+                        payload: updateUserValidator,
+                    },
+                },
+            },
+            {
+                method: 'PUT',
+                path: '/users/doubtPoints/{userId}/{status}',
+                handler: updateUserdoubtPointsHandler,
+                options: {
+                    // pre: [isAdmin],
+                    // auth: {
+                    //     mode: 'required',
+                    //     strategy: API_AUTH_STRATEGY,
+                    // },
+                    auth: false,
+                    validate: {
+                        params: Joi.object({
+                            userId: Joi.number().integer(),
+                            status: Joi.boolean(),
                         }),
                         payload: updateUserValidator,
                     },

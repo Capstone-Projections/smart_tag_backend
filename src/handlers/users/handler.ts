@@ -1,6 +1,7 @@
 import Hapi from '@hapi/hapi';
 import { UpdateUserInput, UserInput } from './interface';
 import Boom from '@hapi/boom';
+import { currentDate } from '../attendances/attendance.helpers';
 
 export async function createUserHandler(
     request: Hapi.Request,
@@ -85,6 +86,45 @@ export async function updateUserHandler(
                 iduser: userId,
             },
             data: payload,
+        });
+        return h.response(updatedUser).code(200);
+    } catch (err) {
+        console.log(err);
+        return h.response().code(500);
+    }
+}
+
+export async function updateUserdoubtPointsHandler(
+    request: Hapi.Request,
+    h: Hapi.ResponseToolkit
+) {
+    const { prisma } = request.server.app;
+    const userId = parseInt(request.params.userId, 10);
+    const status = Boolean(request.params.status);
+    const payload = request.payload as UpdateUserInput;
+    let doubtPoints = payload.doubtPoints ?? 0;
+
+    if (status === false) {
+        doubtPoints = doubtPoints + 1;
+    } else {
+        doubtPoints;
+    }
+    try {
+        const updatedUser = await prisma.user.update({
+            where: {
+                iduser: userId,
+            },
+            data: {
+                doubtPoints: doubtPoints,
+            },
+            select: {
+                iduser: true,
+                email: true,
+                firstName: true,
+                lastName: true,
+                indexNumber: true,
+                doubtPoints: true,
+            },
         });
         return h.response(updatedUser).code(200);
     } catch (err) {

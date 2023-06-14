@@ -157,6 +157,26 @@ const attedancePlugin = {
                     },
                 },
             },
+            // {
+            //     method: 'GET',
+            //     path: 'attendance/lesson/{userId}/{lessonId}',
+            //     handler: getAttendanceForUserForLessonHandler,
+            //     options:{
+            //         auth:{
+            //             mode:'optional'
+            //         },
+            //         validate:{
+            //             params: Joi.object({
+            //                 lessonId: Joi.number().integer(),
+            //                 userId: Joi.number().integer(),
+            //             }),
+            //             failAction: (request, h, err) => {
+            //                 // show validation errors to user
+            //                 throw err;
+            //             },
+            //         }
+            //     }
+            // }
         ]);
     },
 };

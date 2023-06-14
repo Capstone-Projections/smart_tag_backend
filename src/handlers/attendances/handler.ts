@@ -2,6 +2,7 @@ import Hapi from '@hapi/hapi';
 import Boom from '@hapi/boom';
 import { AttendanceInput, UpdateAttendanceInput } from './interface';
 import { currentDate, selectUsersFromAttendance } from './attendance.helpers';
+import { UpdateUserInput } from '../users/interface';
 
 export async function createAttendanceHandler(
     request: Hapi.Request,
@@ -23,6 +24,7 @@ export async function createAttendanceHandler(
                 idattendance: true,
                 lesson: true,
                 user: true,
+                status: true,
             },
         });
         return h.response(createdAttendance).code(201);
@@ -172,9 +174,19 @@ export async function getListOfPeopleForImpersonationDetectionHandler(
                 middleName: true,
                 lastName: true,
                 doubtPoints: true,
+                attendance: {
+                    where: {
+                        currentDateTime: currentDate,
+                        lesson_idlesson: lessonId,
+                    },
+                    select: {
+                        idattendance: true,
+                    },
+                },
             },
         });
         const selectedUsers = selectUsersFromAttendance(attendancePeople);
+
         return h.response(selectedUsers).code(200);
         // return h.response(attendancePeople).code(200);
     } catch (err: any) {
