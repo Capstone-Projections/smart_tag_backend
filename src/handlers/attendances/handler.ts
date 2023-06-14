@@ -157,6 +157,7 @@ export async function getListOfPeopleForImpersonationDetectionHandler(
     try {
         const attendancePeople = await prisma.user.findMany({
             where: {
+                role: 'STUDENT',
                 attendance: {
                     some: {
                         currentDateTime: currentDate,
@@ -166,6 +167,9 @@ export async function getListOfPeopleForImpersonationDetectionHandler(
             },
             select: {
                 iduser: true,
+                firstName: true,
+                middleName: true,
+                lastName: true,
                 doubtPoints: true,
             },
         });
