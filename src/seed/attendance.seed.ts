@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
+import { currentDate } from '../handlers/attendances/attendance.helpers';
 
 const prisma = new PrismaClient();
-const currentDate = new Date().toISOString().slice(0, 10);
 
 async function main() {
     const attendance = await prisma.attendance.createMany({
