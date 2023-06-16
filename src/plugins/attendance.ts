@@ -1,7 +1,7 @@
 import Hapi from '@hapi/hapi';
 import Joi from 'joi';
 import { API_AUTH_STRATEGY } from '../handlers/authentication/handler';
-import { isAdmin } from '../utils/auth-helpers';
+import { isAdmin } from '../handlers/authentication/auth-helpers';
 import {
     createAttendanceHandler,
     deleteAttendanceHandler,

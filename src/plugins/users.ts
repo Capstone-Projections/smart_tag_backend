@@ -11,7 +11,7 @@ import {
 } from '../handlers/users/inputValidator';
 import Hapi from '@hapi/hapi';
 import Joi from 'joi';
-import { isAdmin } from '../utils/auth-helpers';
+import { isAdmin } from '../handlers/authentication/auth-helpers';
 import { API_AUTH_STRATEGY } from '../handlers/authentication/handler';
 
 // plugin to instantiate Prisma Client

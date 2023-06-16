@@ -13,8 +13,6 @@ const authPlugin: Hapi.Plugin<null> = {
     name: 'app/auth',
     dependencies: ['prisma', 'hapi-auth-jwt2', 'app/email'],
     register: async function (server: Hapi.Server) {
-        // TODO: Add the authentication strategy
-
         server.auth.strategy(API_AUTH_STRATEGY, 'jwt', {
             key: JWT_SECRET,
             verifyOptions: { algorithms: [JWT_ALGORITHM] },
