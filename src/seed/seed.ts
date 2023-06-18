@@ -74,22 +74,22 @@ async function main() {
             },
         },
     });
-
-    const attendance = await prisma.attendance.create({
-        data: {
-            status: true,
-            user: {
-                connect: {
-                    iduser: 1,
-                },
-            },
-            lesson: {
-                connect: {
-                    idlesson: 1,
-                },
-            },
-        },
-    });
+    //TODO: ERROR IN CURRENT SEED FILE BECAUSE OF DATABASAE CHANGES
+    // const attendance = await prisma.attendance.create({
+    //     data: {
+    //         status: true,
+    //         user: {
+    //             connect: {
+    //                 iduser: 1,
+    //             },
+    //         },
+    //         lesson: {
+    //             connect: {
+    //                 idlesson: 1,
+    //             },
+    //         },
+    //     },
+    // });
 }
 
 main()

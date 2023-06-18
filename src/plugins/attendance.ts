@@ -118,11 +118,13 @@ const attedancePlugin = {
                 path: '/attendance/lesson/{lessonId}',
                 handler: getAttendanceForLessonHandler,
                 options: {
-                    pre: [isAdmin],
-                    auth: {
-                        mode: 'required',
-                        strategy: API_AUTH_STRATEGY,
-                    },
+                    //TODO: add auth again after the testing completes
+                    // pre: [isAdmin],
+                    // auth: {
+                    //     mode: 'required',
+                    //     strategy: API_AUTH_STRATEGY,
+                    // },
+                    auth: { mode: 'optional' },
                     validate: {
                         params: Joi.object({
                             lessonId: Joi.number().integer(),
@@ -136,16 +138,15 @@ const attedancePlugin = {
             },
             {
                 method: 'GET',
-                // path: '/attendance/lessons/users/',
                 path: '/attendance/lessons/users/{lessonId}',
                 handler: getListOfPeopleForImpersonationDetectionHandler,
                 options: {
-                    // pre: [isAdmin],
+                    pre: [isAdmin],
                     auth: {
-                        // mode: 'required',
-                        // strategy: API_AUTH_STRATEGY,
-                        mode: 'optional',
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
                     },
+                    // auth: {mode: "optional"},
                     validate: {
                         params: Joi.object({
                             lessonId: Joi.number().integer(),

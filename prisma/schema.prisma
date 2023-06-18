@@ -19,7 +19,7 @@ generator client {
 model attendance {
   idattendance      Int     @id @default(autoincrement())
   status            Boolean    @default(false)
-  currentDateTime   String?
+  currentDateTime   String
   lesson_idlesson   Int
   user_iduser Int
   lesson            lesson  @relation(fields: [lesson_idlesson], references: [idlesson], onDelete: NoAction, onUpdate: NoAction, map: "fk_attendance_lesson1")

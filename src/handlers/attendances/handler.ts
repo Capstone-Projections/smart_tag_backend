@@ -3,6 +3,7 @@ import Boom from '@hapi/boom';
 import { AttendanceInput, UpdateAttendanceInput } from './interface';
 import { currentDate, selectUsersFromAttendance } from './attendance.helpers';
 import { UpdateUserInput } from '../users/interface';
+import { extractMetadata, jsonToCsv } from '../../configs/jsonToCsv';
 
 export async function createAttendanceHandler(
     request: Hapi.Request,
@@ -142,7 +143,31 @@ export async function getAttendanceForLessonHandler(
             where: {
                 lesson_idlesson: lessonId,
             },
+            include: {
+                user: {
+                    select: {
+                        indexNumber: true,
+                    },
+                },
+                lesson: {
+                    select: {
+                        course_has_lesson: {
+                            select: {
+                                course: {
+                                    select: {
+                                        courseCode: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
         });
+
+        const { currentDateTime, courseCode } = extractMetadata(attendance);
+        console.log(currentDateTime, courseCode);
+        jsonToCsv(attendance, currentDateTime, courseCode);
         return h.response(attendance).code(200);
     } catch (err: any) {
         request.log('error', err);
