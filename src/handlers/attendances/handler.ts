@@ -3,7 +3,7 @@ import Boom from '@hapi/boom';
 import { AttendanceInput, UpdateAttendanceInput } from './interface';
 import { currentDate, selectUsersFromAttendance } from './attendance.helpers';
 import { UpdateUserInput } from '../users/interface';
-import { extractMetadata, jsonToCsv } from '../../configs/jsonToCsv';
+import { extractMetadata, jsonToCsv } from '../../utils/jsonToCsv';
 
 export async function createAttendanceHandler(
     request: Hapi.Request,
@@ -137,7 +137,7 @@ export async function getAttendanceForLessonHandler(
 ) {
     const { prisma } = request.server.app;
     const lessonId = parseInt(request.params.lessonId, 10);
-
+    //TODO: see what you can do to reduce the number of joins that are happening in this table
     try {
         const attendance = await prisma.attendance.findMany({
             where: {
@@ -166,8 +166,9 @@ export async function getAttendanceForLessonHandler(
         });
 
         const { currentDateTime, courseCode } = extractMetadata(attendance);
-        console.log(currentDateTime, courseCode);
+        // console.log(currentDateTime, courseCode);
         jsonToCsv(attendance, currentDateTime, courseCode);
+
         return h.response(attendance).code(200);
     } catch (err: any) {
         request.log('error', err);

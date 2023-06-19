@@ -1,4 +1,4 @@
-import { createServer, startServer } from './configs/server';
+import { createServer, startServer } from './utils/server';
 
 createServer()
     .then(startServer)
