@@ -1,40 +1,45 @@
 import { createObjectCsvWriter } from 'csv-writer';
 
-//this function does the conversion of the json file to csv format
 export function jsonToCsv(
     jsonData: AttendanceRecord[],
     currentDateTime: string,
-    courseCode: string
+    courseCode: string,
+    folder: string
 ): Promise<string> {
-    //promise used to handle the asynchronous nature of the function so that the function can be used in other parts of the application
     return new Promise((resolve, reject) => {
-        // Extract the index numbers from the JSON data
+        const indexNumbersSet = new Set<string>(); // Use a Set to store unique index numbers
 
-        const indexNumbers = jsonData.map((obj) => obj.user.indexNumber);
+        // Extract unique index numbers from the JSON data
+        jsonData.forEach((obj) => {
+            if (obj.user && obj.user.indexNumber) {
+                indexNumbersSet.add(obj.user.indexNumber.toString());
+            }
+        });
 
-        // Prepare the CSV records
+        const indexNumbers = Array.from(indexNumbersSet); // Convert the Set back to an array
+
         const records = indexNumbers.map((indexNumber) => ({
             'Index Number': indexNumber,
         }));
 
-        // Define the CSV file path and header
-        const csvFilePath = `Present students on ${currentDateTime} for ${courseCode}.csv`;
+        const csvFilePath = `${folder}/Present Students on ${currentDateTime} for ${courseCode}.csv`;
         const header = [{ id: 'Index Number', title: 'Index Number' }];
 
-        // Create the CSV writer
         const csvWriter = createObjectCsvWriter({
             path: csvFilePath,
             header,
         });
 
-        // Write the records to the CSV file
         csvWriter
             .writeRecords(records)
-            //TODO: remove the console.log and then implement logging in the application instead
-            .then(() => console.log('CSV file generated successfully'))
-            .catch((error) =>
-                console.error('Error generating CSV file:', error)
-            );
+            .then(() => {
+                console.log('CSV file generated successfully');
+                resolve(csvFilePath);
+            })
+            .catch((error) => {
+                console.error('Error generating CSV file:', error);
+                reject(error);
+            });
     });
 }
 

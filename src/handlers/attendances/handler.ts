@@ -4,6 +4,7 @@ import { AttendanceInput, UpdateAttendanceInput } from './interface';
 import { currentDate, selectUsersFromAttendance } from './attendance.helpers';
 import { UpdateUserInput } from '../users/interface';
 import { extractMetadata, jsonToCsv } from '../../utils/jsonToCsv';
+import { uploadToGoogleDrive } from '../../utils/uploadToGoogleDrive';
 
 export async function createAttendanceHandler(
     request: Hapi.Request,
@@ -137,10 +138,12 @@ export async function getAttendanceForLessonHandler(
 ) {
     const { prisma } = request.server.app;
     const lessonId = parseInt(request.params.lessonId, 10);
-    //TODO: see what you can do to reduce the number of joins that are happening in this table
+
     try {
         const attendance = await prisma.attendance.findMany({
             where: {
+                //TODO: change this to current date after testing is done
+                // currentDateTime: currentDate,
                 lesson_idlesson: lessonId,
             },
             include: {
@@ -165,14 +168,34 @@ export async function getAttendanceForLessonHandler(
             },
         });
 
+        if (attendance.length === 0) {
+            // No data found, return an appropriate response
+            return h.response('No attendance data found').code(404);
+        }
+
         const { currentDateTime, courseCode } = extractMetadata(attendance);
-        // console.log(currentDateTime, courseCode);
-        jsonToCsv(attendance, currentDateTime, courseCode);
+        const destinationFolderId = courseCode;
+
+        const csvFilePath = await jsonToCsv(
+            attendance,
+            currentDateTime,
+            courseCode,
+            'Attendance Data'
+        );
+        // console.log('CSV file generated successfully:', csvFilePath);
+        const webViewLink = await uploadToGoogleDrive(
+            csvFilePath,
+            destinationFolderId
+        );
+
+        // console.log('CSV file uploaded to Google Drive:', webViewLink);
+        // Return the link of the uploaded file in the response
+        // return h.response({ link: webViewLink }).code(200);
 
         return h.response(attendance).code(200);
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to get attendance');
+        return Boom.badImplementation('Failed to get attendance');
     }
 }
 
