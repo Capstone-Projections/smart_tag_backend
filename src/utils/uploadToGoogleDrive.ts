@@ -1,51 +1,36 @@
 import { google } from 'googleapis';
 import * as fs from 'fs';
+import path from 'path';
 
 export async function uploadToGoogleDrive(
     csvFilePath: string,
     destinationFolderId: string
 ): Promise<string> {
-    const credentials = require('./credentials.json');
+    // const credentials = require('./credentials.json');
+    const CLIENT_ID = process.env.CLIENT_ID;
+    const CLIENT_SECRET = process.env.CLIENT_SECRET;
+    const REDIRECT_URI = process.env.REDIRECT_URI;
+    const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
 
-    const auth = new google.auth.OAuth2();
+    const oAuthClient = new google.auth.OAuth2(
+        CLIENT_ID,
+        CLIENT_SECRET,
+        REDIRECT_URI
+    );
 
-    auth.setCredentials(credentials);
+    oAuthClient.setCredentials({ refresh_token: REFRESH_TOKEN });
 
-    const drive = google.drive({ version: 'v3', auth });
+    const drive = google.drive({ version: 'v3', auth: oAuthClient });
     // console.log("hey");
-
-    const csvReadStream = fs.createReadStream(csvFilePath);
+    const fileDirectory = '../../' + csvFilePath;
+    const filePath = path.join(__dirname, fileDirectory);
+    const csvReadStream = fs.createReadStream(filePath);
 
     const fileMetadata = {
         name: csvFilePath.split('/').pop(),
-        parents: [destinationFolderId],
     };
 
     try {
-        // Check if the destination folder exists
-        const folderResponse = await drive.files.get({
-            fileId: destinationFolderId,
-            fields: 'id',
-        });
-
-        // If the folder doesn't exist, create it
-        if (!folderResponse.data.id) {
-            const folderMetadata = {
-                name: 'My Folder', // Specify the desired folder name
-                mimeType: 'application/vnd.google-apps.folder',
-                parents: [destinationFolderId],
-            };
-
-            const folderCreationResponse = await drive.files.create({
-                requestBody: folderMetadata,
-                fields: 'id',
-            });
-
-            fileMetadata.parents = [
-                folderCreationResponse.data.id || destinationFolderId,
-            ];
-        }
-
         const media = {
             mimeType: 'text/csv',
             body: csvReadStream,

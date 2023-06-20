@@ -4,7 +4,11 @@ import { AttendanceInput, UpdateAttendanceInput } from './interface';
 import { currentDate, selectUsersFromAttendance } from './attendance.helpers';
 import { UpdateUserInput } from '../users/interface';
 import { extractMetadata, jsonToCsv } from '../../utils/jsonToCsv';
+import { google } from 'googleapis';
+import * as fs from 'fs';
+import path from 'path';
 import { uploadToGoogleDrive } from '../../utils/uploadToGoogleDrive';
+// import { uploadToGoogleDrive } from '../../utils/uploadToGoogleDrive';
 
 export async function createAttendanceHandler(
     request: Hapi.Request,
@@ -182,17 +186,17 @@ export async function getAttendanceForLessonHandler(
             courseCode,
             'Attendance Data'
         );
-        // console.log('CSV file generated successfully:', csvFilePath);
+        // console.log(csvFilePath);
         const webViewLink = await uploadToGoogleDrive(
             csvFilePath,
             destinationFolderId
         );
 
-        // console.log('CSV file uploaded to Google Drive:', webViewLink);
+        console.log('CSV file uploaded to Google Drive:', webViewLink);
         // Return the link of the uploaded file in the response
-        // return h.response({ link: webViewLink }).code(200);
+        return h.response({ link: webViewLink }).code(200);
 
-        return h.response(attendance).code(200);
+        // return h.response(attendance).code(200);
     } catch (err: any) {
         request.log('error', err);
         return Boom.badImplementation('Failed to get attendance');
