@@ -6,7 +6,8 @@ export async function uploadToGoogleDrive(
     csvFilePath: string,
     destinationFolderId: string
 ): Promise<string> {
-    // const credentials = require('./credentials.json');
+    //TODO: include the creation of a folder for the particular course when creating the folder
+    //TODO: also make sure that after the upload is done the file is also removed from the folder that it is in.
     const CLIENT_ID = process.env.CLIENT_ID;
     const CLIENT_SECRET = process.env.CLIENT_SECRET;
     const REDIRECT_URI = process.env.REDIRECT_URI;

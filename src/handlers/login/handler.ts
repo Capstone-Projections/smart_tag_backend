@@ -39,12 +39,14 @@ export async function loginHandler(
                     },
                 },
             },
+            select: {
+                iduser: true,
+            },
         });
 
         // 👇 send the email token
-        // console.log("hey");
         await sendEmailToken(email, emailToken);
-        return h.response().code(200);
+        return h.response({ userid: createdToken.iduser }).code(200);
     } catch (error: any) {
         // 👇 if the error is a Prisma error, it means the user already exists
 

@@ -136,6 +136,7 @@ export async function getUserAttendanceHandler(
     }
 }
 
+//TODO: change documentation inside of the notion once everything is done properly
 export async function getAttendanceForLessonHandler(
     request: Hapi.Request,
     h: Hapi.ResponseToolkit
