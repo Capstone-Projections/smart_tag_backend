@@ -5,7 +5,7 @@ import { TokenType, UserRole } from '@prisma/client';
 import { add } from 'date-fns';
 
 const EMAIL_TOKEN_EXPIRATION_MINUTES = 10;
-//TODO:  include the role as part of the login process
+
 export async function loginHandler(
     request: Hapi.Request,
     h: Hapi.ResponseToolkit

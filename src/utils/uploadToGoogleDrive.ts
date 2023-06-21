@@ -7,7 +7,6 @@ export async function uploadToGoogleDrive(
     csvFilePath: string,
     destinationFolderId: string
 ): Promise<string> {
-    //TODO: include the creation of a folder for the particular course when creating the folder
     const CLIENT_ID = process.env.CLIENT_ID;
     const CLIENT_SECRET = process.env.CLIENT_SECRET;
     const REDIRECT_URI = process.env.REDIRECT_URI;

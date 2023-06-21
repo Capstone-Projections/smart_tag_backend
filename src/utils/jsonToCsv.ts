@@ -36,7 +36,7 @@ export function jsonToCsv(
         csvWriter
             .writeRecords(records)
             .then(() => {
-                console.log('CSV file generated successfully');
+                // console.log('CSV file generated successfully');
                 resolve(csvFilePath);
             })
             .catch((error) => {

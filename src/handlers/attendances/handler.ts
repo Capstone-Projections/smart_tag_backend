@@ -146,8 +146,7 @@ export async function getAttendanceForLessonHandler(
     try {
         const attendance = await prisma.attendance.findMany({
             where: {
-                //TODO: change this to current date after testing is done
-                // currentDateTime: currentDate,
+                currentDateTime: currentDate,
                 lesson_idlesson: lessonId,
             },
             include: {
@@ -192,7 +191,7 @@ export async function getAttendanceForLessonHandler(
             destinationFolderId
         );
 
-        console.log('CSV file uploaded to Google Drive:', webContentLink);
+        // console.log('CSV file uploaded to Google Drive:', webContentLink);
         // Return the link of the uploaded file in the response
         return h.response({ Download_Link: webContentLink }).code(200);
 

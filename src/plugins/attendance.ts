@@ -118,13 +118,12 @@ const attedancePlugin = {
                 path: '/attendance/lesson/{lessonId}',
                 handler: getAttendanceForLessonHandler,
                 options: {
-                    //TODO: add auth again after the testing completes
-                    // pre: [isAdmin],
-                    // auth: {
-                    //     mode: 'required',
-                    //     strategy: API_AUTH_STRATEGY,
-                    // },
-                    auth: { mode: 'optional' },
+                    pre: [isAdmin],
+                    auth: {
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
+                    },
+                    // auth: { mode: 'optional' },
                     validate: {
                         params: Joi.object({
                             lessonId: Joi.number().integer(),
