@@ -1,4 +1,5 @@
 import { createObjectCsvWriter } from 'csv-writer';
+import path from 'path';
 
 export function jsonToCsv(
     jsonData: AttendanceRecord[],
@@ -24,9 +25,11 @@ export function jsonToCsv(
 
         const csvFilePath = `${folder}/Present Students on ${currentDateTime} for ${courseCode}.csv`;
         const header = [{ id: 'Index Number', title: 'Index Number' }];
+        const filePath = '../../' + csvFilePath;
+        const fileDirectory = path.join(__dirname, filePath);
 
         const csvWriter = createObjectCsvWriter({
-            path: csvFilePath,
+            path: fileDirectory,
             header,
         });
 

@@ -2,7 +2,6 @@ import { google } from 'googleapis';
 import * as fs from 'fs';
 import path from 'path';
 import { deleteFileAfterUploading } from './deleteFile';
-import { json } from 'stream/consumers';
 
 export async function uploadToGoogleDrive(
     csvFilePath: string,
@@ -58,7 +57,7 @@ export async function uploadToGoogleDrive(
         });
         //this is to delet the file after it has been uploaded
         //TODO: remoe this delete file from here and place it in the handler portion
-        // deleteFileAfterUploading(filePath);
+        deleteFileAfterUploading(filePath);
         return webContentLink;
     } catch (error) {
         console.error('Error uploading file to Google Drive:', error);
