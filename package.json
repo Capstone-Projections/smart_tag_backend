@@ -14,8 +14,7 @@
         "dev": "ts-node-dev --respawn ./src/index.ts",
         "dev:prod": "node ./dist/index.js",
         "test": "jest",
-        "lint": "npx prettier -w .",
-        "postinstall": "tsc"
+        "lint": "npx prettier -w ."
     },
     "author": "Capstone Projections",
     "license": "ISC",
