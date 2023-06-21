@@ -2,13 +2,13 @@ import { google } from 'googleapis';
 import * as fs from 'fs';
 import path from 'path';
 import { deleteFileAfterUploading } from './deleteFile';
+import { json } from 'stream/consumers';
 
 export async function uploadToGoogleDrive(
     csvFilePath: string,
     destinationFolderId: string
 ): Promise<string> {
     //TODO: include the creation of a folder for the particular course when creating the folder
-    //TODO: also make sure that after the upload is done the file is also removed from the folder that it is in.
     const CLIENT_ID = process.env.CLIENT_ID;
     const CLIENT_SECRET = process.env.CLIENT_SECRET;
     const REDIRECT_URI = process.env.REDIRECT_URI;
@@ -41,13 +41,25 @@ export async function uploadToGoogleDrive(
         const response = await drive.files.create({
             requestBody: fileMetadata,
             media,
-            fields: 'webViewLink',
+            fields: 'webViewLink,webContentLink,id',
         });
 
-        const webViewLink = response.data.webViewLink ?? '';
+        const fileId = response.data.id ?? '';
+
+        const webContentLink = response.data.webContentLink ?? '';
+
+        //this gives open permissions for the file that was uploaded
+        await drive.permissions.create({
+            fileId: fileId,
+            requestBody: {
+                role: 'reader',
+                type: 'anyone',
+            },
+        });
         //this is to delet the file after it has been uploaded
+        //TODO: remoe this delete file from here and place it in the handler portion
         deleteFileAfterUploading(filePath);
-        return webViewLink;
+        return webContentLink;
     } catch (error) {
         console.error('Error uploading file to Google Drive:', error);
         throw error;

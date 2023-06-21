@@ -188,14 +188,14 @@ export async function getAttendanceForLessonHandler(
             'Attendance Data'
         );
         // console.log(csvFilePath);
-        const webViewLink = await uploadToGoogleDrive(
+        const webContentLink = await uploadToGoogleDrive(
             csvFilePath,
             destinationFolderId
         );
 
-        console.log('CSV file uploaded to Google Drive:', webViewLink);
+        console.log('CSV file uploaded to Google Drive:', webContentLink);
         // Return the link of the uploaded file in the response
-        return h.response({ link: webViewLink }).code(200);
+        return h.response({ Download_Link: webContentLink }).code(200);
 
         // return h.response(attendance).code(200);
     } catch (err: any) {
