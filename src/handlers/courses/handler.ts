@@ -169,6 +169,11 @@ export async function getUsersForCourseHandler(
                     },
                 },
             },
+            select: {
+                iduser: true,
+                firstName: true,
+                lastName: true,
+            },
         });
         return h.response(users).code(200);
     } catch (err: any) {

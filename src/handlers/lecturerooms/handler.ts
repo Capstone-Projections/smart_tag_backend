@@ -1,6 +1,7 @@
 import Hapi from '@hapi/hapi';
 import Boom from '@hapi/boom';
 import { LectureroomInput, UpdateLecturoomInput } from './interface';
+//BUG: Add a type for the error by using a console log to see what type it is or what attributes it carries and then creating a template for it
 
 export async function createLectureroomHandler(
     request: Hapi.Request,

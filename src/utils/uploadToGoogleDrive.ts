@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import path from 'path';
 import { deleteFileAfterUploading } from './deleteFile';
 
+//TODO: move files like these into the middleware folder since they deserve to be there
 export async function uploadToGoogleDrive(
     csvFilePath: string,
     destinationFolderId: string
