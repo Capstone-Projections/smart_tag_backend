@@ -202,12 +202,14 @@ export async function getAttendanceForLessonHandler(
     }
 }
 
+//TODO: add course to the things that are checked
 export async function getListOfPeopleForImpersonationDetectionHandler(
     request: Hapi.Request,
     h: Hapi.ResponseToolkit
 ) {
     const { prisma } = request.server.app;
     const lessonId = parseInt(request.params.lessonId, 10);
+    const courseId = parseInt(request.params.courseId, 10);
 
     try {
         const attendancePeople = await prisma.user.findMany({
@@ -217,6 +219,11 @@ export async function getListOfPeopleForImpersonationDetectionHandler(
                     some: {
                         currentDateTime: currentDate,
                         lesson_idlesson: lessonId,
+                    },
+                },
+                user_has_course: {
+                    some: {
+                        course_idcourse: courseId,
                     },
                 },
             },

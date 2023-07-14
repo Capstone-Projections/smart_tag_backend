@@ -137,7 +137,7 @@ const attedancePlugin = {
             },
             {
                 method: 'GET',
-                path: '/attendance/lessons/users/{lessonId}',
+                path: '/attendance/lessons/users/{lessonId}/{courseId}',
                 handler: getListOfPeopleForImpersonationDetectionHandler,
                 options: {
                     pre: [isAdmin],
@@ -149,6 +149,7 @@ const attedancePlugin = {
                     validate: {
                         params: Joi.object({
                             lessonId: Joi.number().integer(),
+                            courseId: Joi.number().integer(),
                         }),
                         failAction: (request, h, err) => {
                             // show validation errors to user
