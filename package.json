@@ -21,7 +21,7 @@
     "dependencies": {
         "@hapi/hapi": "^21.3.2",
         "@hapi/joi": "^17.1.1",
-        "@prisma/client": "4.15.0",
+        "@prisma/client": "5",
         "@sendgrid/mail": "^7.7.0",
         "@types/hapi__joi": "^17.1.9",
         "@types/jsonwebtoken": "8.5.0",
@@ -39,6 +39,7 @@
         "jsonwebtoken": "8.5.1",
         "mongoose": "^6.10.0",
         "prettier": "^2.8.8",
+        "prisma": "5",
         "ts-node-dev": "^2.0.0"
     },
     "devDependencies": {

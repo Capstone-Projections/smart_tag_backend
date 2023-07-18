@@ -23,7 +23,15 @@ export async function loginHandler(
 
     try {
         // 👇 create a short lived token and update user or create if they don't exist
+        const existingUser = await prisma.user.findUnique({
+            where: {
+                email,
+            },
+        });
 
+        if (!existingUser) {
+            return Boom.badRequest('User does not exist.');
+        }
         const createdToken = await prisma.token.create({
             data: {
                 emailToken,
@@ -46,7 +54,7 @@ export async function loginHandler(
     } catch (error: any) {
         // 👇 if the error is a Prisma error, it means the user already exists
 
-        return Boom.badImplementation(error.message);
+        return Boom.badImplementation('User does not exist');
     }
 }
 
