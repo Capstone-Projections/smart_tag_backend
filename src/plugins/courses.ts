@@ -3,6 +3,7 @@ import Joi from 'joi';
 import {
     createCourseForUserHandler,
     createCourseHandler,
+    deleteCourseForUserHandler,
     deleteCourseHandler,
     getCoursesForUserHandler,
     getCoursesHandler,
@@ -136,6 +137,24 @@ const coursesPlugin = {
                     validate: {
                         params: Joi.object({
                             courseId: Joi.number().integer(),
+                        }),
+                    },
+                },
+            },
+            {
+                method: 'DELETE',
+                path: '/courses/{courseId}/{userId}',
+                handler: deleteCourseForUserHandler,
+                options: {
+                    auth: {
+                        mode: 'optional',
+                        // mode: 'required',
+                        // strategy: API_AUTH_STRATEGY,
+                    },
+                    validate: {
+                        params: Joi.object({
+                            courseId: Joi.number().integer(),
+                            userId: Joi.number().integer(),
                         }),
                     },
                 },
