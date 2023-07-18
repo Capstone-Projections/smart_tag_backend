@@ -10,6 +10,22 @@ export async function createCourseHandler(
     const payload = request.payload as CourseInput;
     const userId = request.auth.credentials;
 
+    const courseCodeExists = await prisma.course.findFirst({
+        where: {
+            courseCode: payload.courseCode,
+        },
+    });
+
+    const courseNameExists = await prisma.course.findFirst({
+        where: {
+            name: payload.name,
+        },
+    });
+
+    if (courseCodeExists || courseNameExists) {
+        return Boom.badRequest('Course already exists');
+    }
+
     try {
         const createdCourse = await prisma.course.create({
             data: {
