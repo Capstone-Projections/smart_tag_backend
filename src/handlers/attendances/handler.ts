@@ -202,7 +202,7 @@ export async function getAttendanceForLessonHandler(
     }
 }
 
-//TODO: add course to the things that are checked
+//TODO:this route is doing too many joins so how do we fix it
 export async function getListOfPeopleForImpersonationDetectionHandler(
     request: Hapi.Request,
     h: Hapi.ResponseToolkit

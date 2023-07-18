@@ -1,6 +1,6 @@
 import Hapi from '@hapi/hapi';
 import Joi from 'joi';
-import { loginHandler } from '../handlers/login/handler';
+import { loginHandler, signupHandler } from '../handlers/login/handler';
 import {
     API_AUTH_STRATEGY,
     JWT_ALGORITHM,
@@ -46,6 +46,19 @@ const authPlugin: Hapi.Plugin<null> = {
                         payload: Joi.object({
                             email: Joi.string().email().required(),
                             emailToken: Joi.string().required(),
+                        }),
+                    },
+                },
+            },
+            {
+                method: 'POST',
+                path: '/signup',
+                handler: signupHandler,
+                options: {
+                    auth: false,
+                    validate: {
+                        payload: Joi.object({
+                            email: Joi.string().email().required(),
                         }),
                     },
                 },
