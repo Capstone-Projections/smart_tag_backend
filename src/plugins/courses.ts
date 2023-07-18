@@ -147,9 +147,9 @@ const coursesPlugin = {
                 handler: deleteCourseForUserHandler,
                 options: {
                     auth: {
-                        mode: 'optional',
-                        // mode: 'required',
-                        // strategy: API_AUTH_STRATEGY,
+                        // mode: 'optional',
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
                     },
                     validate: {
                         params: Joi.object({
