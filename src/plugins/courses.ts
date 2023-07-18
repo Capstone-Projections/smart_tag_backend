@@ -1,6 +1,7 @@
 import Hapi from '@hapi/hapi';
 import Joi from 'joi';
 import {
+    connectUserToCourse,
     createCourseForUserHandler,
     createCourseHandler,
     deleteCourseForUserHandler,
@@ -145,6 +146,24 @@ const coursesPlugin = {
                 method: 'DELETE',
                 path: '/courses/{courseId}/{userId}',
                 handler: deleteCourseForUserHandler,
+                options: {
+                    auth: {
+                        // mode: 'optional',
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
+                    },
+                    validate: {
+                        params: Joi.object({
+                            courseId: Joi.number().integer(),
+                            userId: Joi.number().integer(),
+                        }),
+                    },
+                },
+            },
+            {
+                method: 'GET',
+                path: '/courses/user/{courseId}/{userId}',
+                handler: connectUserToCourse,
                 options: {
                     auth: {
                         // mode: 'optional',

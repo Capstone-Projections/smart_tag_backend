@@ -225,3 +225,27 @@ export async function deleteCourseForUserHandler(
         return Boom.badImplementation('Failed to delete user course');
     }
 }
+
+export async function connectUserToCourse(
+    request: Hapi.Request,
+    h: Hapi.ResponseToolkit
+) {
+    const { prisma } = request.server.app;
+    const courseId = parseInt(request.params.courseId, 10);
+    const userId = parseInt(request.params.userId, 10);
+
+    try {
+        await prisma.user_has_course.create({
+            data: {
+                course_idcourse: courseId,
+                user_iduser: userId,
+            },
+        });
+
+        // If needed, you can send a response indicating the deletion was successful.
+        return h.response({ message: 'Course added successfully' }).code(200);
+    } catch (err) {
+        // Handle any potential errors, e.g., send an error response.
+        return Boom.badImplementation('Failed to add course for user');
+    }
+}
