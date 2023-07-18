@@ -30,7 +30,7 @@ export async function createLessonHandler(
         return h.response(createdLesson).code(201);
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to create lesson');
+        return Boom.badImplementation('Failed to create lesson');
     }
 }
 
@@ -50,7 +50,7 @@ export async function getLessonsHandler(
         return h.response(lessons).code(200);
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to get lessons');
+        return Boom.badImplementation('Failed to get lessons');
     }
 }
 
@@ -75,7 +75,7 @@ export async function updateLessonsHandler(
         return h.response(updatedLesson).code(200);
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to update lesson');
+        return Boom.badImplementation('Failed to update lesson');
     }
 }
 
@@ -95,7 +95,7 @@ export async function deleteLessonsHandler(
         return h.response().code(204);
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to delete lesson');
+        return Boom.badImplementation('Failed to delete lesson');
     }
 }
 
@@ -122,7 +122,7 @@ export async function getIndividualLessonsHandler(
         }
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to get lesson');
+        return Boom.badImplementation('Failed to get lesson');
     }
 }
 
@@ -153,6 +153,6 @@ export async function getLessonsForCourseHandler(
         }
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to get lesson');
+        return Boom.badImplementation('Failed to get lesson');
     }
 }

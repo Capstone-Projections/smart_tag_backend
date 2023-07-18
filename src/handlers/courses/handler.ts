@@ -23,7 +23,7 @@ export async function createCourseHandler(
         return h.response(createdCourse).code(201);
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to create course');
+        return Boom.badImplementation('Failed to create course');
     }
 }
 
@@ -43,7 +43,7 @@ export async function getCoursesHandler(
         return h.response(courses).code(200);
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to get courses');
+        return Boom.badImplementation('Failed to get courses');
     }
 }
 
@@ -65,7 +65,7 @@ export async function updateCourseHandler(
         return h.response(updatedCourse).code(200);
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to update course');
+        return Boom.badImplementation('Failed to update course');
     }
 }
 
@@ -85,7 +85,7 @@ export async function deleteCourseHandler(
         return h.response().code(204);
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to delete course');
+        return Boom.badImplementation('Failed to delete course');
     }
 }
 
@@ -120,7 +120,7 @@ export async function createCourseForUserHandler(
         return h.response(createdCourse).code(201);
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to create course');
+        return Boom.badImplementation('Failed to create course');
     }
 }
 
@@ -146,7 +146,7 @@ export async function getCoursesForUserHandler(
         return h.response(courses).code(200);
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to get courses');
+        return Boom.badImplementation('Failed to get courses');
     }
 }
 
@@ -178,6 +178,6 @@ export async function getUsersForCourseHandler(
         return h.response(users).code(200);
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to get users');
+        return Boom.badImplementation('Failed to get users');
     }
 }

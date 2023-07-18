@@ -80,7 +80,7 @@ export async function authenticateHandler(
         }
     } catch (error) {
         //@ts-ignore
-        return Boom.badImplementation(error.message);
+        return Boom.badImplementation('An error occured');
     }
 }
 

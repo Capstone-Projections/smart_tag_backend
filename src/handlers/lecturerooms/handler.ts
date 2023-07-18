@@ -25,7 +25,7 @@ export async function createLectureroomHandler(
         return h.response(createdLectureroom).code(201);
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to create lectureroom');
+        return Boom.badImplementation('Failed to create lectureroom');
     }
 }
 
@@ -40,7 +40,7 @@ export async function getLectureroomHandler(
         return h.response(lectureroom).code(200);
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to get lectureroom');
+        return Boom.badImplementation('Failed to get lectureroom');
     }
 }
 
@@ -62,7 +62,7 @@ export async function updateLectureroomHandler(
         return h.response(updatedLectureroom).code(200);
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to update lectureroom');
+        return Boom.badImplementation('Failed to update lectureroom');
     }
 }
 
@@ -82,7 +82,7 @@ export async function deleteLectureroomHandler(
         return h.response().code(204);
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to delete lectureroom');
+        return Boom.badImplementation('Failed to delete lectureroom');
     }
 }
 
@@ -106,6 +106,6 @@ export async function getIndividualLectureroomHandler(
         }
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to get individual lectureroom');
+        return Boom.badImplementation('Failed to get individual lectureroom');
     }
 }

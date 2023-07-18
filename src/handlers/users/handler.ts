@@ -47,8 +47,8 @@ export async function getUserHandler(
             return h.response(user).code(200);
         }
     } catch (err) {
-        console.log(err);
-        return Boom.badImplementation();
+        // console.log(err);
+        return Boom.badImplementation('User Not Available');
     }
 }
 
@@ -90,7 +90,7 @@ export async function updateUserHandler(
         return h.response(updatedUser).code(200);
     } catch (err) {
         console.log(err);
-        return h.response().code(500);
+        return Boom.badImplementation('Profile Set Up Failed');
     }
 }
 
@@ -129,6 +129,6 @@ export async function updateUserdoubtPointsHandler(
         return h.response(updatedUser).code(200);
     } catch (err) {
         console.log(err);
-        return h.response().code(500);
+        return Boom.badImplementation('Failed to update Doubt Points');
     }
 }

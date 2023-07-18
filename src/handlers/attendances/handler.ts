@@ -36,7 +36,7 @@ export async function createAttendanceHandler(
         return h.response(createdAttendance).code(201);
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to create attendance');
+        return Boom.badImplementation('Failed to create attendance');
     }
 }
 
@@ -57,7 +57,7 @@ export async function getAttendanceHandler(
         return h.response(attendance).code(200);
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to get attendance');
+        return Boom.badImplementation('Failed to get attendance');
     }
 }
 
@@ -88,7 +88,7 @@ export async function updateAttendanceHandler(
         return h.response(updatedAttendance).code(200);
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to update attendance');
+        return Boom.badImplementation('Failed to update attendance');
     }
 }
 
@@ -108,7 +108,7 @@ export async function deleteAttendanceHandler(
         return h.response().code(204);
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to delete attendance');
+        return Boom.badImplementation('Failed to delete attendance');
     }
 }
 
@@ -132,7 +132,7 @@ export async function getUserAttendanceHandler(
         return h.response(attendance).code(200);
     } catch (err: any) {
         request.log('error', err);
-        return Boom.badImplementation('failed to get attendance');
+        return Boom.badImplementation('Failed to get attendance');
     }
 }
 
@@ -251,7 +251,7 @@ export async function getListOfPeopleForImpersonationDetectionHandler(
     } catch (err: any) {
         request.log('error', err);
         return Boom.badImplementation(
-            'failed to get list of people for impersonation detection'
+            'Failed to get list of people for impersonation detection'
         );
     }
 }
