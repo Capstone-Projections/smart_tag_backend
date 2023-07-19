@@ -8,6 +8,7 @@ import { google } from 'googleapis';
 import * as fs from 'fs';
 import path from 'path';
 import { uploadToGoogleDrive } from '../../utils/uploadToGoogleDrive';
+import { getAbsentStudents } from '../../utils/getAbsentPeopleList';
 // import { uploadToGoogleDrive } from '../../utils/uploadToGoogleDrive';
 
 export async function createAttendanceHandler(
@@ -142,12 +143,31 @@ export async function getAttendanceForLessonHandler(
 ) {
     const { prisma } = request.server.app;
     const lessonId = parseInt(request.params.lessonId, 10);
+    const status = true;
+    const courseId = parseInt(request.params.courseId, 10);
 
     try {
+        const students = await prisma.user.findMany({
+            where: {
+                role: 'STUDENT',
+                user_has_course: {
+                    some: {
+                        course: {
+                            idcourse: courseId,
+                        },
+                    },
+                },
+            },
+            select: {
+                indexNumber: true,
+            },
+        });
+
         const attendance = await prisma.attendance.findMany({
             where: {
                 currentDateTime: currentDate,
                 lesson_idlesson: lessonId,
+                status: status,
             },
             include: {
                 user: {
@@ -171,31 +191,31 @@ export async function getAttendanceForLessonHandler(
             },
         });
 
+        const absentStudents = getAbsentStudents(students, attendance);
         if (attendance.length === 0) {
             // No data found, return an appropriate response
             return h.response('No attendance data found').code(404);
         }
 
         const { currentDateTime, courseCode } = extractMetadata(attendance);
-        const destinationFolderId = courseCode;
 
         const csvFilePath = await jsonToCsv(
             attendance,
+            absentStudents,
             currentDateTime,
             courseCode,
             'Attendance Data'
         );
-        // console.log(csvFilePath);
-        const webContentLink = await uploadToGoogleDrive(
-            csvFilePath,
-            destinationFolderId
-        );
+        console.log(csvFilePath);
+        const webContentLink = await uploadToGoogleDrive(csvFilePath);
 
         // console.log('CSV file uploaded to Google Drive:', webContentLink);
         // Return the link of the uploaded file in the response
-        return h.response({ Download_Link: webContentLink }).code(200);
+        return h.response({ Link: webContentLink }).code(200);
 
         // return h.response(attendance).code(200);
+        // return h.response(students).code(200);
+        // return h.response(absentStudents).code(200);
     } catch (err: any) {
         request.log('error', err);
         return Boom.badImplementation('Failed to get attendance');

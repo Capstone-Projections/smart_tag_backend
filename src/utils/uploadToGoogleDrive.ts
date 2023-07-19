@@ -2,11 +2,10 @@ import { google } from 'googleapis';
 import * as fs from 'fs';
 import path from 'path';
 import { deleteFileAfterUploading } from './deleteFile';
+import Boom from '@hapi/boom';
 
-//TODO: move files like these into the middleware folder since they deserve to be there
 export async function uploadToGoogleDrive(
-    csvFilePath: string,
-    destinationFolderId: string
+    csvFilePath: string
 ): Promise<string> {
     const CLIENT_ID = process.env.CLIENT_ID;
     const CLIENT_SECRET = process.env.CLIENT_SECRET;
@@ -60,7 +59,7 @@ export async function uploadToGoogleDrive(
         deleteFileAfterUploading(filePath);
         return webContentLink;
     } catch (error) {
-        console.error('Error uploading file to Google Drive:', error);
-        throw error;
+        console.error('Error Retrieving file', error);
+        throw Boom.badImplementation('Failed to upload file');
     }
 }

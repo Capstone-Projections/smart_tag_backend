@@ -1,30 +1,57 @@
 import { createObjectCsvWriter } from 'csv-writer';
 import path from 'path';
 
+interface AbsentStudent {
+    indexNumber: number | null;
+}
+
 export function jsonToCsv(
-    jsonData: AttendanceRecord[],
+    presentStudents: AttendanceRecord[],
+    absentStudents: AbsentStudent[],
     currentDateTime: string,
     courseCode: string,
     folder: string
 ): Promise<string> {
     return new Promise((resolve, reject) => {
-        const indexNumbersSet = new Set<string>(); // Use a Set to store unique index numbers
+        const presentIndexNumbersSet = new Set<string>();
+        const absentIndexNumbersSet = new Set<string>();
 
-        // Extract unique index numbers from the JSON data
-        jsonData.forEach((obj) => {
+        // Extract unique index numbers for present students
+        presentStudents.forEach((obj) => {
             if (obj.user && obj.user.indexNumber) {
-                indexNumbersSet.add(obj.user.indexNumber.toString());
+                presentIndexNumbersSet.add(obj.user.indexNumber.toString());
             }
         });
 
-        const indexNumbers = Array.from(indexNumbersSet); // Convert the Set back to an array
+        // Extract unique index numbers for absent students
+        absentStudents.forEach((absentStudent) => {
+            if (absentStudent.indexNumber !== null) {
+                absentIndexNumbersSet.add(absentStudent.indexNumber.toString());
+            }
+        });
 
-        const records = indexNumbers.map((indexNumber) => ({
+        const presentIndexNumbers = Array.from(presentIndexNumbersSet);
+        const absentIndexNumbers = Array.from(absentIndexNumbersSet);
+
+        const presentRecords = presentIndexNumbers.map((indexNumber) => ({
+            Status: 'Present',
             'Index Number': indexNumber,
         }));
 
-        const csvFilePath = `${folder}/Present Students on ${currentDateTime} for ${courseCode}.csv`;
-        const header = [{ id: 'Index Number', title: 'Index Number' }];
+        const absentRecords = absentIndexNumbers.map((indexNumber) => ({
+            Status: 'Absent',
+            'Index Number': indexNumber,
+        }));
+
+        // Combine the records for present and absent students
+        const allRecords = [...presentRecords, ...absentRecords];
+
+        const csvFilePath = `${folder}/Attendance on ${currentDateTime} for ${courseCode}.csv`;
+        const header = [
+            { id: 'Status', title: 'Status' },
+            { id: 'Index Number', title: 'Index Number' },
+        ];
+
         const filePath = '../../' + csvFilePath;
         const fileDirectory = path.join(__dirname, filePath);
 
@@ -34,7 +61,7 @@ export function jsonToCsv(
         });
 
         csvWriter
-            .writeRecords(records)
+            .writeRecords(allRecords)
             .then(() => {
                 // console.log('CSV file generated successfully');
                 resolve(csvFilePath);
@@ -46,7 +73,6 @@ export function jsonToCsv(
     });
 }
 
-//this function does the extration of the data that is going to be used for the title of the csv file
 export function extractMetadata(jsonData: AttendanceRecord[]): {
     currentDateTime: string;
     courseCode: string;
@@ -57,8 +83,6 @@ export function extractMetadata(jsonData: AttendanceRecord[]): {
         firstObject.lesson.course_has_lesson[0].course.courseCode;
     return { currentDateTime, courseCode };
 }
-
-//template for attendance
 interface AttendanceRecord {
     idattendance: number;
     status: boolean;
