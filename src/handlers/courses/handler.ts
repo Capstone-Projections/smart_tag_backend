@@ -52,8 +52,10 @@ export async function getCoursesHandler(
 
     try {
         const courses = await prisma.course.findMany({
-            include: {
-                user_has_course: true,
+            select: {
+                name: true,
+                courseCode: false,
+                user_has_course: false,
             },
         });
         return h.response(courses).code(200);

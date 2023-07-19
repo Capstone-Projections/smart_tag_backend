@@ -50,6 +50,7 @@ const coursesPlugin = {
                     auth: {
                         mode: 'required',
                         strategy: API_AUTH_STRATEGY,
+                        // mode: 'optional'
                     },
                 },
             },
