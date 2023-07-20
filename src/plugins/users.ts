@@ -73,12 +73,12 @@ const userPlugin = {
                 path: '/users/doubtPoints/{userId}/{status}',
                 handler: updateUserdoubtPointsHandler,
                 options: {
-                    // pre: [isAdmin],
-                    // auth: {
-                    //     mode: 'required',
-                    //     strategy: API_AUTH_STRATEGY,
-                    // },
-                    auth: false,
+                    pre: [isAdmin],
+                    auth: {
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
+                    },
+                    // auth: false,
                     validate: {
                         params: Joi.object({
                             userId: Joi.number().integer(),
