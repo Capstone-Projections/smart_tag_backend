@@ -20,6 +20,7 @@ const userInputValidator = Joi.object({
     referenceNumber: Joi.string().optional(),
     indexNumber: Joi.number().optional(),
     studyProgram: Joi.string().optional(),
+    department: Joi.string().optional(),
     doubtPoints: Joi.number().optional(),
     role: Joi.string().alter({
         create: (schema) => schema.required(),

@@ -4,6 +4,7 @@ export interface UserInput {
     email: string;
     middleName?: string;
     password?: string;
+    department?: string;
     referenceNumber?: string;
     indexNumber?: number;
     studyProgram?: string;
@@ -15,6 +16,7 @@ export interface UserInput {
 export interface UpdateUserInput {
     firstName?: string;
     lastName?: string;
+    department?: string;
     email?: string;
     middleName?: string;
     password?: string;

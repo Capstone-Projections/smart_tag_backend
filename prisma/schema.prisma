@@ -87,6 +87,7 @@ model user {
   user_has_course user_has_course[]
   tokens             token[]
   isAdmin   Boolean? @default(false)
+  department  String?              @db.VarChar(200)
 }
 
 model token {
