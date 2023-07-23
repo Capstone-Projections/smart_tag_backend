@@ -244,8 +244,6 @@ export async function connectUserToCourse(
                 user_iduser: userId,
             },
         });
-
-        // If needed, you can send a response indicating the deletion was successful.
         return h.response({ message: 'Course added successfully' }).code(200);
     } catch (err) {
         // Handle any potential errors, e.g., send an error response.

@@ -3,6 +3,7 @@ export interface LessonInput {
     endTime: string;
     day: string;
     idlectureRoom: number;
+    idcourse: number;
 }
 
 export interface LessonUpdateInput {
@@ -10,4 +11,5 @@ export interface LessonUpdateInput {
     endTime?: string;
     day?: string;
     idlectureRoom?: number;
+    idcourse?: number;
 }

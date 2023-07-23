@@ -8,7 +8,6 @@ export async function createLessonHandler(
 ) {
     const { prisma } = request.server.app;
     const payload = request.payload as LessonInput;
-    const userId = request.auth.credentials;
 
     try {
         const createdLesson = await prisma.lesson.create({
@@ -154,5 +153,26 @@ export async function getLessonsForCourseHandler(
     } catch (err: any) {
         request.log('error', err);
         return Boom.badImplementation('Failed to get lesson');
+    }
+}
+
+export async function connectLessonToCourse(
+    request: Hapi.Request,
+    h: Hapi.ResponseToolkit
+) {
+    const { prisma } = request.server.app;
+    const courseId = parseInt(request.params.courseId, 10);
+    const lessonId = parseInt(request.params.lessonId, 10);
+
+    try {
+        await prisma.course_has_lesson.create({
+            data: {
+                course_idcourse: courseId,
+                lesson_idlesson: lessonId,
+            },
+        });
+        return h.response({ message: 'Lesson added successfully' }).code(200);
+    } catch (err) {
+        return Boom.badImplementation('Failed to add lesson for course');
     }
 }

@@ -4,6 +4,7 @@ import { API_AUTH_STRATEGY } from '../handlers/authentication/handler';
 import { isAdmin } from '../handlers/authentication/auth-helpers';
 import path from 'path';
 import {
+    connectLessonToCourse,
     createLessonHandler,
     deleteLessonsHandler,
     getIndividualLessonsHandler,
@@ -119,6 +120,24 @@ const lessonsPlugin = {
                         failAction: (request, h, err) => {
                             throw err;
                         },
+                    },
+                },
+            },
+            {
+                method: 'GET',
+                path: '/lesson/course/{lessonId}/{courseId}',
+                handler: connectLessonToCourse,
+                options: {
+                    auth: {
+                        mode: 'optional',
+                        // mode: 'required',
+                        // strategy: API_AUTH_STRATEGY,
+                    },
+                    validate: {
+                        params: Joi.object({
+                            lessonId: Joi.number().integer(),
+                            courseId: Joi.number().integer(),
+                        }),
                     },
                 },
             },

@@ -12,4 +12,5 @@ export const updateLessonValidator = Joi.object({
     endTime: Joi.string().optional(),
     day: Joi.string().optional(),
     idlectureRoom: Joi.number().optional(),
+    idcourse: Joi.number().optional(),
 });
