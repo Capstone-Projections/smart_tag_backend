@@ -128,10 +128,12 @@ const lessonsPlugin = {
                 path: '/lesson/course/{lessonId}/{courseId}',
                 handler: connectLessonToCourse,
                 options: {
+                    pre: [isAdmin],
                     auth: {
-                        mode: 'optional',
-                        // mode: 'required',
-                        // strategy: API_AUTH_STRATEGY,
+                        // mode: 'optional',
+
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
                     },
                     validate: {
                         params: Joi.object({
