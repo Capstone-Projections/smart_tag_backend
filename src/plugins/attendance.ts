@@ -5,6 +5,7 @@ import { isAdmin } from '../handlers/authentication/auth-helpers';
 import {
     createAttendanceHandler,
     deleteAttendanceHandler,
+    getAttendanceDataAsJsonForAnalyticsHandler,
     getAttendanceForLessonHandler,
     getAttendanceHandler,
     getListOfPeopleForImpersonationDetectionHandler,
@@ -161,26 +162,29 @@ const attedancePlugin = {
                     },
                 },
             },
-            // {
-            //     method: 'GET',
-            //     path: 'attendance/lesson/{userId}/{lessonId}',
-            //     handler: getAttendanceForUserForLessonHandler,
-            //     options:{
-            //         auth:{
-            //             mode:'optional'
-            //         },
-            //         validate:{
-            //             params: Joi.object({
-            //                 lessonId: Joi.number().integer(),
-            //                 userId: Joi.number().integer(),
-            //             }),
-            //             failAction: (request, h, err) => {
-            //                 // show validation errors to user
-            //                 throw err;
-            //             },
-            //         }
-            //     }
-            // }
+            {
+                method: 'GET',
+                path: '/analytics/{lessonId}/{courseId}',
+                handler: getAttendanceDataAsJsonForAnalyticsHandler,
+                options: {
+                    pre: [isAdmin],
+                    auth: {
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
+                    },
+                    // auth: {mode: "optional"},
+                    validate: {
+                        params: Joi.object({
+                            lessonId: Joi.number().integer(),
+                            courseId: Joi.number().integer(),
+                        }),
+                        failAction: (request, h, err) => {
+                            // show validation errors to user
+                            throw err;
+                        },
+                    },
+                },
+            },
         ]);
     },
 };

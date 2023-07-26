@@ -275,3 +275,72 @@ export async function getListOfPeopleForImpersonationDetectionHandler(
         );
     }
 }
+
+export async function getAttendanceDataAsJsonForAnalyticsHandler(
+    request: Hapi.Request,
+    h: Hapi.ResponseToolkit
+) {
+    const { prisma } = request.server.app;
+    const lessonId = parseInt(request.params.lessonId, 10);
+    const status = true;
+    const courseId = parseInt(request.params.courseId, 10);
+
+    try {
+        const students = await prisma.user.findMany({
+            where: {
+                role: 'STUDENT',
+                user_has_course: {
+                    some: {
+                        course: {
+                            idcourse: courseId,
+                        },
+                    },
+                },
+            },
+            select: {
+                indexNumber: true,
+            },
+        });
+
+        if (!students) {
+            // Handle the case when students array is null
+            return h.response('No students found').code(404);
+        }
+
+        const attendance = await prisma.attendance.findMany({
+            where: {
+                currentDateTime: currentDate,
+                lesson_idlesson: lessonId,
+                status: status,
+            },
+            include: {
+                user: {
+                    select: {
+                        indexNumber: true,
+                    },
+                },
+            },
+        });
+        const absentStudents = getAbsentStudents(students, attendance);
+        if (attendance.length === 0) {
+            // No data found, return an appropriate response
+            return h.response('No attendance data found').code(404);
+        }
+
+        // Initialize counters for absent and present students
+
+        // Count present students based on the attendance data
+        //   presentCount = attendance.length - absentCount;
+
+        // Create the result object
+        const result = {
+            Absent: absentStudents.length,
+            Present: attendance.length,
+        };
+
+        return h.response(result).code(200);
+    } catch (err: any) {
+        request.log('error', err);
+        return Boom.badImplementation('Failed to get attendance');
+    }
+}
