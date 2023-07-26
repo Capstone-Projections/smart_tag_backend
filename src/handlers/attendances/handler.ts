@@ -1,6 +1,6 @@
 import Hapi from '@hapi/hapi';
 import Boom from '@hapi/boom';
-import { AttendanceInput, UpdateAttendanceInput } from './interface';
+import { Analytics, AttendanceInput, UpdateAttendanceInput } from './interface';
 import { currentDate, selectUsersFromAttendance } from './attendance.helpers';
 import { UpdateUserInput } from '../users/interface';
 import { extractMetadata, jsonToCsv } from '../../utils/jsonToCsv';
@@ -145,6 +145,7 @@ export async function getAttendanceForLessonHandler(
     const lessonId = parseInt(request.params.lessonId, 10);
     const status = true;
     const courseId = parseInt(request.params.courseId, 10);
+    const payload = request.payload as Analytics;
 
     try {
         const students = await prisma.user.findMany({
@@ -165,7 +166,7 @@ export async function getAttendanceForLessonHandler(
 
         const attendance = await prisma.attendance.findMany({
             where: {
-                currentDateTime: currentDate,
+                currentDateTime: payload.currentDateTime,
                 lesson_idlesson: lessonId,
                 status: status,
             },
@@ -284,6 +285,7 @@ export async function getAttendanceDataAsJsonForAnalyticsHandler(
     const lessonId = parseInt(request.params.lessonId, 10);
     const status = true;
     const courseId = parseInt(request.params.courseId, 10);
+    const payload = request.payload as Analytics;
 
     try {
         const students = await prisma.user.findMany({
@@ -309,7 +311,7 @@ export async function getAttendanceDataAsJsonForAnalyticsHandler(
 
         const attendance = await prisma.attendance.findMany({
             where: {
-                currentDateTime: currentDate,
+                currentDateTime: payload.currentDateTime,
                 lesson_idlesson: lessonId,
                 status: status,
             },

@@ -115,22 +115,25 @@ const attedancePlugin = {
             },
             //get attendance per lesson id
             {
-                method: 'GET',
+                method: 'POST',
                 path: '/attendance/lesson/{lessonId}/{courseId}',
                 // path: '/attendance/lesson/{courseId}',
                 // path: '/attendance/lesson/{lessonId}',
                 handler: getAttendanceForLessonHandler,
                 options: {
-                    // pre: [isAdmin],
-                    // auth: {
-                    //     mode: 'required',
-                    //     strategy: API_AUTH_STRATEGY,
-                    // },
-                    auth: { mode: 'optional' },
+                    pre: [isAdmin],
+                    auth: {
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
+                    },
+                    // auth: { mode: 'optional' },
                     validate: {
                         params: Joi.object({
                             lessonId: Joi.number().integer(),
                             courseId: Joi.number().integer(),
+                        }),
+                        payload: Joi.object({
+                            currentDateTime: Joi.string(),
                         }),
                         failAction: (request, h, err) => {
                             // show validation errors to user
@@ -163,7 +166,7 @@ const attedancePlugin = {
                 },
             },
             {
-                method: 'GET',
+                method: 'POST',
                 path: '/analytics/{lessonId}/{courseId}',
                 handler: getAttendanceDataAsJsonForAnalyticsHandler,
                 options: {
@@ -177,6 +180,9 @@ const attedancePlugin = {
                         params: Joi.object({
                             lessonId: Joi.number().integer(),
                             courseId: Joi.number().integer(),
+                        }),
+                        payload: Joi.object({
+                            currentDateTime: Joi.string(),
                         }),
                         failAction: (request, h, err) => {
                             // show validation errors to user

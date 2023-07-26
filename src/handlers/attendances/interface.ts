@@ -9,3 +9,7 @@ export interface UpdateAttendanceInput {
     lesson_idlesson?: number;
     user_iduser?: number;
 }
+
+export interface Analytics {
+    currentDateTime: string;
+}
