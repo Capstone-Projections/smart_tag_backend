@@ -186,11 +186,11 @@ const coursesPlugin = {
                 // path: '/courses/user',
                 handler: connectUserToCourseBasedOnIndexNumber,
                 options: {
-                    // pre:[isAdmin],
+                    pre: [isAdmin],
                     auth: {
-                        mode: 'optional',
-                        // mode: 'required',
-                        // strategy: API_AUTH_STRATEGY,
+                        // mode: 'optional',
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
                     },
                     validate: {
                         params: Joi.object({
