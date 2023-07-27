@@ -1,6 +1,11 @@
 import Hapi from '@hapi/hapi';
 import Boom from '@hapi/boom';
-import { CourseInput, UpdateCourseInput } from './interface';
+import {
+    CourseInput,
+    IndexNumberConnect,
+    IndexNumberConnectArray,
+    UpdateCourseInput,
+} from './interface';
 
 export async function createCourseHandler(
     request: Hapi.Request,
@@ -248,5 +253,44 @@ export async function connectUserToCourse(
     } catch (err) {
         // Handle any potential errors, e.g., send an error response.
         return Boom.badImplementation('Failed to add course for user');
+    }
+}
+
+export async function connectUserToCourseBasedOnIndexNumber(
+    request: Hapi.Request,
+    h: Hapi.ResponseToolkit
+) {
+    const { prisma } = request.server.app;
+    const courseId = parseInt(request.params.courseId, 10);
+    const payload = request.payload as IndexNumberConnectArray;
+
+    try {
+        for (const indexNumber of payload['Index Numbers']) {
+            const userId = await prisma.user.findUnique({
+                where: {
+                    indexNumber: indexNumber,
+                },
+                select: { iduser: true },
+            });
+
+            if (!userId) {
+                return Boom.badImplementation(
+                    'No user found with index number ' + indexNumber
+                );
+            }
+
+            const id = userId.iduser;
+            await prisma.user_has_course.create({
+                data: {
+                    course_idcourse: courseId,
+                    user_iduser: id,
+                },
+            });
+        }
+
+        return h.response({ message: 'Courses added successfully' }).code(200);
+    } catch (err) {
+        // Handle any potential errors, e.g., send an error response.
+        return Boom.badImplementation('Failed to add courses for users');
     }
 }

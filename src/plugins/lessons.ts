@@ -5,6 +5,7 @@ import { isAdmin } from '../handlers/authentication/auth-helpers';
 import path from 'path';
 import {
     connectLessonToCourse,
+    createLessonAndConnectToCourse,
     createLessonHandler,
     deleteLessonsHandler,
     getIndividualLessonsHandler,
@@ -140,6 +141,27 @@ const lessonsPlugin = {
                             lessonId: Joi.number().integer(),
                             courseId: Joi.number().integer(),
                         }),
+                    },
+                },
+            },
+            {
+                method: 'POST',
+                path: 'c',
+                handler: createLessonAndConnectToCourse,
+                options: {
+                    // pre: [isAdmin],
+                    auth: {
+                        mode: 'optional',
+
+                        // mode: 'required',
+                        // strategy: API_AUTH_STRATEGY,
+                    },
+                    validate: {
+                        payload: lessonInputValidator,
+                        failAction: (request, h, err) => {
+                            // show validation errors to user
+                            throw err;
+                        },
                     },
                 },
             },

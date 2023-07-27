@@ -1,6 +1,7 @@
 import Hapi from '@hapi/hapi';
 import Boom from '@hapi/boom';
 import { LessonInput, LessonUpdateInput } from './interface';
+import { create } from 'domain';
 
 export async function createLessonHandler(
     request: Hapi.Request,
@@ -174,5 +175,48 @@ export async function connectLessonToCourse(
         return h.response({ message: 'Lesson added successfully' }).code(200);
     } catch (err) {
         return Boom.badImplementation('Failed to add lesson for course');
+    }
+}
+
+export async function createLessonAndConnectToCourse(
+    request: Hapi.Request,
+    h: Hapi.ResponseToolkit
+) {
+    const { prisma } = request.server.app;
+    const payload = request.payload as LessonInput;
+    const courseId = parseInt(request.params.courseId, 10);
+    let createdLesson;
+
+    try {
+        createdLesson = await prisma.lesson.create({
+            data: {
+                startTime: payload.startTime,
+                endTime: payload.endTime,
+                day: payload.day,
+                lectureroom: {
+                    connect: {
+                        idlectureRoom: payload.idlectureRoom,
+                    },
+                },
+            },
+            select: {
+                idlesson: true,
+                lectureroom: true,
+            },
+        });
+
+        await prisma.course_has_lesson.create({
+            data: {
+                course_idcourse: courseId,
+                lesson_idlesson: createdLesson.idlesson,
+            },
+        });
+
+        return h.response({ message: 'Lesson added successfully' }).code(200);
+    } catch (err: any) {
+        request.log('error', err);
+        return Boom.badImplementation(
+            'Failed to create lesson or connect to the course'
+        );
     }
 }
