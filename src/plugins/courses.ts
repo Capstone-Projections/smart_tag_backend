@@ -2,6 +2,7 @@ import Hapi from '@hapi/hapi';
 import Joi from 'joi';
 import {
     connectUserToCourse,
+    connectUserToCourseBasedOnIndexNumber,
     createCourseForUserHandler,
     createCourseHandler,
     deleteCourseForUserHandler,
@@ -176,6 +177,35 @@ const coursesPlugin = {
                             courseId: Joi.number().integer(),
                             userId: Joi.number().integer(),
                         }),
+                    },
+                },
+            },
+            {
+                method: 'POST',
+                path: '/courses/user/{courseId}',
+                // path: '/courses/user',
+                handler: connectUserToCourseBasedOnIndexNumber,
+                options: {
+                    // pre:[isAdmin],
+                    auth: {
+                        mode: 'optional',
+                        // mode: 'required',
+                        // strategy: API_AUTH_STRATEGY,
+                    },
+                    validate: {
+                        params: Joi.object({
+                            courseId: Joi.number().integer(),
+                        }),
+                        payload: Joi.object({
+                            'Index Numbers': Joi.array().items(
+                                Joi.number().integer()
+                            ),
+                        }),
+
+                        failAction: (request, h, err) => {
+                            // show validation errors to user
+                            throw err;
+                        },
                     },
                 },
             },
