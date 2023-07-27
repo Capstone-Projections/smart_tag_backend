@@ -146,15 +146,15 @@ const lessonsPlugin = {
             },
             {
                 method: 'POST',
-                path: 'c',
+                path: '/lesson/course/{courseId}',
                 handler: createLessonAndConnectToCourse,
                 options: {
-                    // pre: [isAdmin],
+                    pre: [isAdmin],
                     auth: {
-                        mode: 'optional',
+                        // mode: 'optional',
 
-                        // mode: 'required',
-                        // strategy: API_AUTH_STRATEGY,
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
                     },
                     validate: {
                         payload: lessonInputValidator,
