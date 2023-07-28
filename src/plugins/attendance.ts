@@ -116,7 +116,7 @@ const attedancePlugin = {
             //get attendance per lesson id
             {
                 method: 'POST',
-                path: '/attendance/lesson/{lessonId}/{courseId}',
+                path: '/attendance/lesson/{courseId}',
                 // path: '/attendance/lesson/{courseId}',
                 // path: '/attendance/lesson/{lessonId}',
                 handler: getAttendanceForLessonHandler,
@@ -129,7 +129,6 @@ const attedancePlugin = {
                     // auth: { mode: 'optional' },
                     validate: {
                         params: Joi.object({
-                            lessonId: Joi.number().integer(),
                             courseId: Joi.number().integer(),
                         }),
                         payload: Joi.object({
@@ -167,7 +166,7 @@ const attedancePlugin = {
             },
             {
                 method: 'POST',
-                path: '/analytics/{lessonId}/{courseId}',
+                path: '/analytics/{courseId}',
                 handler: getAttendanceDataAsJsonForAnalyticsHandler,
                 options: {
                     pre: [isAdmin],
@@ -178,7 +177,6 @@ const attedancePlugin = {
                     // auth: {mode: "optional"},
                     validate: {
                         params: Joi.object({
-                            lessonId: Joi.number().integer(),
                             courseId: Joi.number().integer(),
                         }),
                         payload: Joi.object({

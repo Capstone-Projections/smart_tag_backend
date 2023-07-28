@@ -9,6 +9,7 @@ import * as fs from 'fs';
 import path from 'path';
 import { uploadToGoogleDrive } from '../../utils/uploadToGoogleDrive';
 import { getAbsentStudents } from '../../utils/getAbsentPeopleList';
+import { getDayOfWeek } from '../../utils/dayOfWeek';
 // import { uploadToGoogleDrive } from '../../utils/uploadToGoogleDrive';
 
 export async function createAttendanceHandler(
@@ -142,12 +143,28 @@ export async function getAttendanceForLessonHandler(
     h: Hapi.ResponseToolkit
 ) {
     const { prisma } = request.server.app;
-    const lessonId = parseInt(request.params.lessonId, 10);
+    // const lessonId = parseInt(request.params.lessonId, 10);
     const status = true;
     const courseId = parseInt(request.params.courseId, 10);
     const payload = request.payload as Analytics;
+    const dayOfWeek = getDayOfWeek(payload.currentDateTime);
+    // return dayOfWeek;
 
     try {
+        const lesson = await prisma.lesson.findFirstOrThrow({
+            where: {
+                day: dayOfWeek,
+                course_has_lesson: {
+                    some: {
+                        course_idcourse: courseId,
+                    },
+                },
+            },
+            select: {
+                idlesson: true,
+            },
+        });
+
         const students = await prisma.user.findMany({
             where: {
                 role: 'STUDENT',
@@ -167,7 +184,7 @@ export async function getAttendanceForLessonHandler(
         const attendance = await prisma.attendance.findMany({
             where: {
                 currentDateTime: payload.currentDateTime,
-                lesson_idlesson: lessonId,
+                lesson_idlesson: lesson.idlesson,
                 status: status,
             },
             include: {
@@ -282,12 +299,27 @@ export async function getAttendanceDataAsJsonForAnalyticsHandler(
     h: Hapi.ResponseToolkit
 ) {
     const { prisma } = request.server.app;
-    const lessonId = parseInt(request.params.lessonId, 10);
     const status = true;
     const courseId = parseInt(request.params.courseId, 10);
     const payload = request.payload as Analytics;
+    const dayOfWeek = getDayOfWeek(payload.currentDateTime);
+    // return dayOfWeek;
 
     try {
+        const lesson = await prisma.lesson.findFirstOrThrow({
+            where: {
+                day: dayOfWeek,
+                course_has_lesson: {
+                    some: {
+                        course_idcourse: courseId,
+                    },
+                },
+            },
+            select: {
+                idlesson: true,
+            },
+        });
+
         const students = await prisma.user.findMany({
             where: {
                 role: 'STUDENT',
@@ -312,7 +344,7 @@ export async function getAttendanceDataAsJsonForAnalyticsHandler(
         const attendance = await prisma.attendance.findMany({
             where: {
                 currentDateTime: payload.currentDateTime,
-                lesson_idlesson: lessonId,
+                lesson_idlesson: lesson.idlesson,
                 status: status,
             },
             include: {
@@ -329,11 +361,6 @@ export async function getAttendanceDataAsJsonForAnalyticsHandler(
             return h.response('No attendance data found').code(404);
         }
 
-        // Initialize counters for absent and present students
-
-        // Count present students based on the attendance data
-        //   presentCount = attendance.length - absentCount;
-
         // Create the result object
         const result = {
             Absent: absentStudents.length,
@@ -342,7 +369,7 @@ export async function getAttendanceDataAsJsonForAnalyticsHandler(
 
         return h.response(result).code(200);
     } catch (err: any) {
-        request.log('error', err);
+        // request.log('error', err);
         return Boom.badImplementation('Failed to get attendance');
     }
 }
