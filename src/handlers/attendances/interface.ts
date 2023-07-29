@@ -13,3 +13,9 @@ export interface UpdateAttendanceInput {
 export interface Analytics {
     currentDateTime: string;
 }
+
+export interface LecturerAttendanceInput {
+    status: boolean;
+    lesson_idlesson: number;
+    indexNumber: number;
+}

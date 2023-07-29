@@ -3,6 +3,7 @@ import Joi from 'joi';
 import { API_AUTH_STRATEGY } from '../handlers/authentication/handler';
 import { isAdmin } from '../handlers/authentication/auth-helpers';
 import {
+    createAttendanceByLecturerHandler,
     createAttendanceHandler,
     deleteAttendanceHandler,
     getAttendanceDataAsJsonForAnalyticsHandler,
@@ -14,6 +15,7 @@ import {
 } from '../handlers/attendances/handler';
 import {
     attendanceInputValidator,
+    lecturerAttendanceInputValidator,
     updateAttendanceValidator,
 } from '../handlers/attendances/inputValidator';
 
@@ -182,6 +184,26 @@ const attedancePlugin = {
                         payload: Joi.object({
                             currentDateTime: Joi.string(),
                         }),
+                        failAction: (request, h, err) => {
+                            // show validation errors to user
+                            throw err;
+                        },
+                    },
+                },
+            },
+            {
+                method: 'POST',
+                path: '/attendance/lecturer',
+                handler: createAttendanceByLecturerHandler,
+                options: {
+                    // pre:[isAdmin],
+                    auth: {
+                        mode: 'optional',
+                        // mode: 'required',
+                        // strategy: API_AUTH_STRATEGY,
+                    },
+                    validate: {
+                        payload: lecturerAttendanceInputValidator,
                         failAction: (request, h, err) => {
                             // show validation errors to user
                             throw err;

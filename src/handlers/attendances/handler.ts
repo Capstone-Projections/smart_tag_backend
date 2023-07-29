@@ -1,6 +1,11 @@
 import Hapi from '@hapi/hapi';
 import Boom from '@hapi/boom';
-import { Analytics, AttendanceInput, UpdateAttendanceInput } from './interface';
+import {
+    Analytics,
+    AttendanceInput,
+    LecturerAttendanceInput,
+    UpdateAttendanceInput,
+} from './interface';
 import { currentDate, selectUsersFromAttendance } from './attendance.helpers';
 import { UpdateUserInput } from '../users/interface';
 import { extractMetadata, jsonToCsv } from '../../utils/jsonToCsv';
@@ -371,5 +376,47 @@ export async function getAttendanceDataAsJsonForAnalyticsHandler(
     } catch (err: any) {
         // request.log('error', err);
         return Boom.badImplementation('Failed to get attendance');
+    }
+}
+
+export async function createAttendanceByLecturerHandler(
+    request: Hapi.Request,
+    h: Hapi.ResponseToolkit
+) {
+    const { prisma } = request.server.app;
+    const payload = request.payload as LecturerAttendanceInput;
+    // const userId = request.auth.credentials;
+
+    try {
+        const userId = await prisma.user.findFirst({
+            where: {
+                indexNumber: payload.indexNumber,
+            },
+            select: {
+                iduser: true,
+            },
+        });
+        if (!userId) {
+            return h.response('User not found').code(404);
+        }
+
+        const createdAttendance = await prisma.attendance.create({
+            data: {
+                status: payload.status,
+                lesson_idlesson: payload.lesson_idlesson,
+                user_iduser: userId.iduser,
+                currentDateTime: currentDate,
+            },
+            select: {
+                idattendance: true,
+                lesson: true,
+                user: true,
+                status: true,
+            },
+        });
+        return h.response(createdAttendance).code(201);
+    } catch (err: any) {
+        request.log('error', err);
+        return Boom.badImplementation('Failed to create attendance');
     }
 }
