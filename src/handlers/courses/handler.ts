@@ -251,8 +251,11 @@ export async function connectUserToCourse(
             },
         });
         return h.response({ message: 'Course added successfully' }).code(200);
-    } catch (err) {
+    } catch (err: any) {
         // Handle any potential errors, e.g., send an error response.
+        if (err.code === 'P2002') {
+            return { code: 'P2002', message: 'Course Already Exists For User' };
+        }
         return Boom.badImplementation('Failed to add course for user');
     }
 }
