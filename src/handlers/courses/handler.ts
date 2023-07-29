@@ -6,6 +6,7 @@ import {
     IndexNumberConnectArray,
     UpdateCourseInput,
 } from './interface';
+import { PrismaClientInitializationError } from '@prisma/client/runtime/library';
 
 export async function createCourseHandler(
     request: Hapi.Request,
@@ -265,6 +266,8 @@ export async function connectUserToCourseBasedOnIndexNumber(
     const payload = request.payload as IndexNumberConnectArray;
 
     try {
+        const listOfIndexNumbersNotInDatabase: number[] = [];
+        const studentsAlreadyInCourse: number[] = [];
         for (const indexNumber of payload['Index Numbers']) {
             const userId = await prisma.user.findUnique({
                 where: {
@@ -274,21 +277,33 @@ export async function connectUserToCourseBasedOnIndexNumber(
             });
 
             if (!userId) {
-                return Boom.badImplementation(
-                    'No user found with index number ' + indexNumber
-                );
+                listOfIndexNumbersNotInDatabase.push(indexNumber);
+                continue;
             }
 
             const id = userId.iduser;
-            await prisma.user_has_course.create({
-                data: {
-                    course_idcourse: courseId,
-                    user_iduser: id,
-                },
-            });
+
+            try {
+                await prisma.user_has_course.create({
+                    data: {
+                        course_idcourse: courseId,
+                        user_iduser: id,
+                    },
+                });
+            } catch (error: any) {
+                if (error.code === 'P2002') {
+                    studentsAlreadyInCourse.push(indexNumber);
+                }
+            }
         }
 
-        return h.response({ message: 'Courses added successfully' }).code(200);
+        return h
+            .response({
+                message: 'Successful',
+                'Invalid Users': listOfIndexNumbersNotInDatabase,
+                'Already Added': studentsAlreadyInCourse,
+            })
+            .code(200);
     } catch (err) {
         // Handle any potential errors, e.g., send an error response.
         return Boom.badImplementation('Failed to add courses for users');
