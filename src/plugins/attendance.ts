@@ -196,11 +196,11 @@ const attedancePlugin = {
                 path: '/attendance/lecturer',
                 handler: createAttendanceByLecturerHandler,
                 options: {
-                    // pre:[isAdmin],
+                    pre: [isAdmin],
                     auth: {
-                        mode: 'optional',
-                        // mode: 'required',
-                        // strategy: API_AUTH_STRATEGY,
+                        // mode: 'optional',
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
                     },
                     validate: {
                         payload: lecturerAttendanceInputValidator,
