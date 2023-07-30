@@ -409,8 +409,21 @@ export async function createAttendanceByLecturerHandler(
                 iduser: true,
             },
         });
+
         if (!userId) {
-            return h.response('User not found').code(404);
+            return h.response({ message: 'User Not Found' }).code(404);
+        }
+        const attendanceAlreadyExists = await prisma.attendance.findFirst({
+            where: {
+                status: payload.status,
+                lesson_idlesson: payload.lesson_idlesson,
+                user_iduser: userId.iduser,
+                currentDateTime: currentDate,
+            },
+        });
+
+        if (attendanceAlreadyExists) {
+            return { message: 'Attendance already taken for class' };
         }
         const createdAttendance = await prisma.attendance.create({
             data: {
