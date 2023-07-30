@@ -30,9 +30,9 @@ const attedancePlugin = {
                 handler: createAttendanceHandler,
                 options: {
                     auth: {
-                        mode: 'optional',
-                        // mode: 'required',
-                        // strategy: API_AUTH_STRATEGY,
+                        // mode: 'optional',
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
                     },
                     validate: {
                         payload: attendanceInputValidator,
