@@ -26,6 +26,19 @@ export async function createAttendanceHandler(
     const userId = request.auth.credentials;
 
     try {
+        const attendanceAlreadyExists = await prisma.attendance.findFirst({
+            where: {
+                status: payload.status,
+                lesson_idlesson: payload.lesson_idlesson,
+                user_iduser: payload.user_iduser,
+                currentDateTime: currentDate,
+            },
+        });
+
+        if (attendanceAlreadyExists) {
+            return { message: 'Attendance already taken for class' };
+        }
+
         const createdAttendance = await prisma.attendance.create({
             data: {
                 status: payload.status,
@@ -42,7 +55,7 @@ export async function createAttendanceHandler(
         });
         return h.response(createdAttendance).code(201);
     } catch (err: any) {
-        request.log('error', err);
+        // request.log('error', err);
         return Boom.badImplementation('Failed to create attendance');
     }
 }
@@ -399,7 +412,6 @@ export async function createAttendanceByLecturerHandler(
         if (!userId) {
             return h.response('User not found').code(404);
         }
-
         const createdAttendance = await prisma.attendance.create({
             data: {
                 status: payload.status,
@@ -416,7 +428,7 @@ export async function createAttendanceByLecturerHandler(
         });
         return h.response(createdAttendance).code(201);
     } catch (err: any) {
-        request.log('error', err);
+        // request.log('error', err);
         return Boom.badImplementation('Failed to create attendance');
     }
 }
