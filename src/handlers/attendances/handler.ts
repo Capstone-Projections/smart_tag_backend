@@ -275,6 +275,7 @@ export async function getListOfPeopleForImpersonationDetectionHandler(
                     some: {
                         currentDateTime: currentDate,
                         lesson_idlesson: lessonId,
+                        status: true,
                     },
                 },
                 user_has_course: {
