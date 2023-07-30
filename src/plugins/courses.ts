@@ -29,10 +29,11 @@ const coursesPlugin = {
                 path: '/courses',
                 handler: createCourseHandler,
                 options: {
-                    pre: [isAdmin],
+                    // pre: [isAdmin],
                     auth: {
-                        mode: 'required',
-                        strategy: API_AUTH_STRATEGY,
+                        // mode: 'required',
+                        mode: 'optional',
+                        // strategy: API_AUTH_STRATEGY,
                     },
                     validate: {
                         payload: createCourseValidator,

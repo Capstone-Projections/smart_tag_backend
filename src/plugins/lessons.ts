@@ -7,6 +7,7 @@ import {
     connectLessonToCourse,
     createLessonAndConnectToCourse,
     createLessonHandler,
+    deleteLessonForCourse,
     deleteLessonsHandler,
     getIndividualLessonsHandler,
     getLessonsForCourseHandler,
@@ -158,6 +159,27 @@ const lessonsPlugin = {
                     },
                     validate: {
                         payload: lessonInputValidator,
+                        failAction: (request, h, err) => {
+                            // show validation errors to user
+                            throw err;
+                        },
+                    },
+                },
+            },
+            {
+                method: 'DELETE',
+                path: '/lesson/course/{courseId}/{lessonId}',
+                handler: deleteLessonForCourse,
+                options: {
+                    pre: [isAdmin],
+                    auth: {
+                        // mode: 'optional',
+
+                        mode: 'required',
+                        strategy: API_AUTH_STRATEGY,
+                    },
+                    validate: {
+                        // payload: lessonInputValidator,
                         failAction: (request, h, err) => {
                             // show validation errors to user
                             throw err;

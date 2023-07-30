@@ -1,7 +1,6 @@
 import Hapi from '@hapi/hapi';
 import Boom from '@hapi/boom';
 import { LessonInput, LessonUpdateInput } from './interface';
-import { create } from 'domain';
 
 export async function createLessonHandler(
     request: Hapi.Request,
@@ -218,5 +217,36 @@ export async function createLessonAndConnectToCourse(
         return Boom.badImplementation(
             'Failed to create lesson or connect to the course'
         );
+    }
+}
+
+export async function deleteLessonForCourse(
+    request: Hapi.Request,
+    h: Hapi.ResponseToolkit
+) {
+    const { prisma } = request.server.app;
+    const courseId = parseInt(request.params.courseId, 10);
+    const lessonId = parseInt(request.params.lessonId, 10);
+
+    try {
+        await prisma.course_has_lesson.delete({
+            where: {
+                course_idcourse_lesson_idlesson: {
+                    course_idcourse: courseId,
+                    lesson_idlesson: lessonId,
+                },
+            },
+        });
+        return h.response({ message: 'Lesson deleted successfully' }).code(200);
+    } catch (err: any) {
+        //error that comes when the field doesn't exist
+        if (err.code === 'P2025') {
+            return h
+                .response({
+                    message: 'This lesson does not exist for this course',
+                })
+                .code(404);
+        }
+        return Boom.badImplementation('Failed to delete lesson for course');
     }
 }

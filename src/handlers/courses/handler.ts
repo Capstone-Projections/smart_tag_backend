@@ -15,23 +15,6 @@ export async function createCourseHandler(
     const { prisma } = request.server.app;
     const payload = request.payload as CourseInput;
     const userId = request.auth.credentials;
-
-    const courseCodeExists = await prisma.course.findFirst({
-        where: {
-            courseCode: payload.courseCode,
-        },
-    });
-
-    const courseNameExists = await prisma.course.findFirst({
-        where: {
-            name: payload.name,
-        },
-    });
-
-    if (courseCodeExists || courseNameExists) {
-        return Boom.badRequest('Course already exists');
-    }
-
     try {
         const createdCourse = await prisma.course.create({
             data: {
@@ -44,7 +27,11 @@ export async function createCourseHandler(
         });
         return h.response(createdCourse).code(201);
     } catch (err: any) {
-        request.log('error', err);
+        if (err.code === 'P2002') {
+            return h
+                .response({ code: 'P2002', message: 'Course Already Exists' })
+                .code(403);
+        }
         return Boom.badImplementation('Failed to create course');
     }
 }
@@ -229,8 +216,11 @@ export async function deleteCourseForUserHandler(
         return h
             .response({ message: 'User course deleted successfully' })
             .code(200);
-    } catch (err) {
+    } catch (err: any) {
         // Handle any potential errors, e.g., send an error response.
+        if (err.code === 'P2025') {
+            return { code: 'P2025', message: 'User Course Does Not Exist' };
+        }
         return Boom.badImplementation('Failed to delete user course');
     }
 }
